@@ -2,14 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Referal;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Faker\Factory;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Str;
 
 class AdminUserSeeder extends Seeder
 {
@@ -29,6 +23,6 @@ class AdminUserSeeder extends Seeder
             'password' => bcrypt('123123'),
         ]);
         $admin->assignRole('admin');
-       
+
     }
 }

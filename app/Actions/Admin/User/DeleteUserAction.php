@@ -12,7 +12,9 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class DeleteUserAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'User';
     protected string $view = 'admin.user';

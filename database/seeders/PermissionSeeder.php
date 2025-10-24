@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
@@ -23,7 +22,7 @@ class PermissionSeeder extends Seeder
             //     'display_name' => 'List',
             // ],
             // lead
-           
+
 
             //role
             [
@@ -106,7 +105,7 @@ class PermissionSeeder extends Seeder
                 'category' => 'workspaces',
                 'display_name' => 'Delete',
             ],
-           
+
         ];
         Permission::insert($records);
     }

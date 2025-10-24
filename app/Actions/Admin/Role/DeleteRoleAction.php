@@ -12,7 +12,9 @@ use Spatie\Permission\Models\Role;
 
 class DeleteRoleAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'Role';
     protected string $view = 'admin.role';

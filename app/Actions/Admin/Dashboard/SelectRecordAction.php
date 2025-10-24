@@ -2,17 +2,14 @@
 
 namespace App\Actions\Admin\Dashboard;
 
-use App\Models\Account;
-use App\Models\Team;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class SelectRecordAction
 {
     use AsAction;
-    const VIEW = 'admin';
-    const URL = '/top-customers';
+    public const VIEW = 'admin';
+    public const URL = '/top-customers';
 
     public function __construct()
     {

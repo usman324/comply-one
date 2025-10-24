@@ -12,7 +12,9 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class StoreCustomerAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'Vendors';
     protected string $view = 'admin/customer';

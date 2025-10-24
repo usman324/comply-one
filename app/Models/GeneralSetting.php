@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class GeneralSetting extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
     protected $guarded = [];
 
     public function getLogo()
@@ -22,6 +23,6 @@ class GeneralSetting extends Model
     }
     public function getLogoHeight()
     {
-        return $this->logo_height ?  $this->logo_height : '60';
+        return $this->logo_height ? $this->logo_height : '60';
     }
 }

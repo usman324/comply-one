@@ -9,12 +9,13 @@ use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class UpdateWorkspaceAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'Workspace';
     protected string $view = 'admin.workspace';
@@ -58,7 +59,7 @@ class UpdateWorkspaceAction extends BaseAction
                 'password' => $request->password ? bcrypt($request->password) : $record->password,
                 'avatar' => $image_name ? $image_name : $record->avatar,
             ]);
-            
+
             DB::commit();
             return  $this->success('Record Updated Successfully');
         } catch (Exception $e) {

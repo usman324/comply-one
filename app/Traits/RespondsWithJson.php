@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 
 trait RespondsWithJson
 {
-
     public static function getDefaultResponse(
         $response,
     ): \Illuminate\Http\JsonResponse {

@@ -3,7 +3,6 @@
 namespace App\Actions\Admin\Workspace;
 
 use App\Actions\BaseAction;
-use App\Models\Plan;
 use App\Models\User;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;

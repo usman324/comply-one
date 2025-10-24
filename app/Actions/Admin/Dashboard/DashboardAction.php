@@ -2,8 +2,6 @@
 
 namespace App\Actions\Admin\Dashboard;
 
-use App\Models\Account;
-use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -11,8 +9,8 @@ use Lorisleiva\Actions\Concerns\AsAction;
 class DashboardAction
 {
     use AsAction;
-    const VIEW = 'admin';
-    const URL = '/top-customers';
+    public const VIEW = 'admin';
+    public const URL = '/top-customers';
 
     public function __construct()
     {
@@ -41,7 +39,7 @@ class DashboardAction
         return [
             'total_user' => $users,
             'total_employees' => $employees,
-            
+
         ];
     }
 }

@@ -12,7 +12,6 @@ use App\Actions\Admin\Dashboard\DashboardAction;
 use App\Actions\Admin\Dashboard\SelectRecordAction;
 use App\Actions\Admin\GenerelSetting\GetGenerelSettingAction;
 use App\Actions\Admin\GenerelSetting\UpdateGenerelSettingAction;
-
 use App\Actions\Admin\Profile\GetProfileAction;
 use App\Actions\Admin\Profile\UpdateProfileAction;
 use App\Actions\Admin\Role\DeleteRoleAction;
@@ -24,7 +23,6 @@ use App\Actions\Admin\User\GetUserListAction;
 use App\Actions\Admin\Role\StoreRoleAction;
 use App\Actions\Admin\User\StoreUserAction;
 use App\Actions\Admin\Role\UpdateRoleAction;
-
 use App\Actions\Admin\User\ActivityUserListAction;
 use App\Actions\Admin\User\UpdateUserAction;
 use App\Actions\Admin\Workspace\DeleteWorkspaceAction;
@@ -34,8 +32,7 @@ use App\Actions\Admin\Workspace\StoreWorkspaceAction;
 use App\Actions\Admin\Workspace\UpdateWorkspaceAction;
 use App\Actions\Auth\LogoutAction;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -95,7 +92,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', UpdateRoleAction::class)->name('update'); // Update plan
         Route::delete('/{id}', DeleteRoleAction::class)->name('destroy'); // Delete plan
     });
-  
+
     Route::prefix('customers')->name('admin.customer.')->group(function () {
         Route::get('/', GetCustomerListAction::class);        // List all plans
         Route::get('/create', GetCustomerAction::class)->name('create'); // Create form
@@ -105,7 +102,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', UpdateCustomerAction::class)->name('update'); // Update plan
         Route::delete('/{id}', DeleteCustomerAction::class)->name('destroy'); // Delete plan
     });
-   
+
     Route::prefix('general-settings')->name('admin.general-setting.')->group(function () {
         Route::get('/', GetGenerelSettingAction::class);        // List all plans
         Route::put('/{id}', UpdateGenerelSettingAction::class)->name('update'); // Update plan

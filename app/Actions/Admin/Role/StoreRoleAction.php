@@ -4,7 +4,6 @@ namespace App\Actions\Admin\Role;
 
 use App\Actions\BaseAction;
 use App\Traits\CustomAction;
-use Illuminate\Support\Facades\Auth;
 use App\Traits\RespondsWithJson;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +14,9 @@ use Spatie\Permission\Models\Role;
 
 class StoreRoleAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'Role';
     protected string $view = 'admin.role';

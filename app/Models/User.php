@@ -16,7 +16,11 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, Billable, HasRoles, SoftDeletes;
+    use HasFactory;
+    use Notifiable;
+    use Billable;
+    use HasRoles;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -92,7 +96,7 @@ class User extends Authenticatable
     {
         $query->whereDoesntHave(
             'roles',
-            fn($q) => $q->whereIn('name', $role)
+            fn ($q) => $q->whereIn('name', $role)
         );
         return $query;
     }

@@ -4,17 +4,17 @@ namespace App\Actions\Admin\GenerelSetting;
 
 use App\Actions\BaseAction;
 use App\Models\GeneralSetting;
-use App\Models\User;
 use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
 use Exception;
-use Illuminate\Support\Facades\Storage;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class UpdateGenerelSettingAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'General Setting';
     protected string $view = 'admin.general-setting';

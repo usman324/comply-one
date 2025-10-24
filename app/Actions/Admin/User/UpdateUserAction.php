@@ -9,12 +9,13 @@ use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class UpdateUserAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'User';
     protected string $view = 'admin/user';

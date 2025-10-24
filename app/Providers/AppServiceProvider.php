@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use  App\Services\InventoryStockService;
+use App\Services\InventoryStockService;
 
 class AppServiceProvider extends ServiceProvider
 {

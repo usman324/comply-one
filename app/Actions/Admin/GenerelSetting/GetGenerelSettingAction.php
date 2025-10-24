@@ -3,15 +3,14 @@
 namespace App\Actions\Admin\GenerelSetting;
 
 use App\Actions\BaseAction;
-use App\Traits\CustomAction;
 use App\Traits\RespondsWithJson;
 use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-
 class GetGenerelSettingAction extends BaseAction
 {
-    use AsAction, RespondsWithJson;
+    use AsAction;
+    use RespondsWithJson;
     protected string $title = 'General Setting';
     protected string $view = 'admin.general-setting';
     protected string $url = 'general-settings';

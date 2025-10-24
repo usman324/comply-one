@@ -3,17 +3,17 @@
 namespace App\Actions\Auth;
 
 use App\Exceptions\ApiException;
-use App\Models\User;
 use App\Traits\CustomAction;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Validator;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class LoginAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     public function rules(): array
     {

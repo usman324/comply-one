@@ -3,7 +3,6 @@
 namespace App\Actions\Admin\Customer;
 
 use App\Actions\BaseAction;
-use App\Models\Plan;
 use App\Models\Customer;
 use App\Models\Sale;
 use Lorisleiva\Actions\Concerns\AsAction;

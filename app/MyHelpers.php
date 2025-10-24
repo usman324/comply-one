@@ -5,7 +5,6 @@ use App\Models\Carton;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Customer;
-use App\Models\ExpenseType;
 use App\Models\GeneralSetting;
 use App\Models\InventoryRoom;
 use App\Models\PaymentMethod;
@@ -14,17 +13,13 @@ use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Models\Rack;
 use App\Models\Size;
-use App\Models\Station;
 use App\Models\Supplier;
-use App\Models\Tag;
-use App\Models\TeamType;
 use App\Models\Unit;
 use App\Models\UserActivity;
 use App\Models\Warehouse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Twilio\Rest\Client;
 use Intervention\Image\Facades\Image;
 
 function toString($value)
@@ -465,7 +460,7 @@ function checkStock($type, $product_id, $warehouse_id, $unit_id)
             ->leftJoinSub($usedAgg, 'u', 'u.product_id', '=', 'product_variations.id')
             ->where('product_variations.id', $product_id) // specific variation id
             ->first();
-            dd($currentStock);
+        dd($currentStock);
     } else {
         $currentStock = Product::query()
             ->select([
@@ -485,7 +480,7 @@ function checkStock($type, $product_id, $warehouse_id, $unit_id)
             ->leftJoinSub($usedAgg, 'u', 'u.product_id', '=', 'products.id')
             ->where('products.id', $product_id)
             ->first();
-            dd($currentStock);
+        dd($currentStock);
     }
     return $currentStock;
 }

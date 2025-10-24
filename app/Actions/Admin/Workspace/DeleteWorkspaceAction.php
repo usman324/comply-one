@@ -12,7 +12,9 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class DeleteWorkspaceAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'Workspace';
     protected string $view = 'admin.workspace';

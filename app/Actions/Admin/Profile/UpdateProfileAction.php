@@ -12,7 +12,9 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class UpdateProfileAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     public function handle(
         $request,

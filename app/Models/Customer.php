@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class Customer extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
     protected $guarded = [];
 
     public function getImage()
@@ -44,10 +45,10 @@ class Customer extends Model
         $amount = $this->getTotalAmount() - $this->getPaidAmount();
         return numberFormat($amount, 2);
     }
-     public function scopeByCustomer($query, $shops)
+    public function scopeByCustomer($query, $shops)
     {
         // if (isset($shops)) {
-            return $query->whereIn('id', $shops??[]);
+        return $query->whereIn('id', $shops ?? []);
         // }
         return $query;
     }

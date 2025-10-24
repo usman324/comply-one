@@ -3,12 +3,9 @@
 namespace App\Actions\Admin\Workspace;
 
 use App\Actions\BaseAction;
-use App\Models\Plan;
-use App\Models\User;
 use App\Models\UserActivity;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
 class ActivityWorkspaceListAction extends BaseAction

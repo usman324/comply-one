@@ -28,7 +28,7 @@ class GetUserAction extends BaseAction
         $routeName = $request->route()->getName(); // Get the route name
         $record = $this->handle($id);
         $roles = Role::where('is_hidden', false)->get();
-        
+
         return match ($routeName) {
             $this->view . '.create' => view($this->view . '.create', get_defined_vars()),
             $this->view . '.edit' => view($this->view . '.edit', get_defined_vars()),

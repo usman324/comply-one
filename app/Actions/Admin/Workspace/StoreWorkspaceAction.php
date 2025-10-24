@@ -13,7 +13,9 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class StoreWorkspaceAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'Workspace';
     protected string $view = 'admin.workspace';
@@ -55,7 +57,7 @@ class StoreWorkspaceAction extends BaseAction
             $record->update([
                 'user_number' => $user_number . $record->id
             ]);
-                $record->assignRole('workspace');
+            $record->assignRole('workspace');
             DB::commit();
             return  $this->success('Record Added Successfully');
         } catch (Exception $e) {

@@ -6,13 +6,12 @@ use App\Actions\BaseAction;
 use App\Models\Customer;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 
 class GetCustomerAction extends BaseAction
 {
     use AsAction;
 
-   
+
     protected string $title = 'Vendors';
     protected string $view = 'admin.customer';
     protected string $url = 'customers';

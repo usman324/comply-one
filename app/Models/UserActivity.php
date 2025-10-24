@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserActivity extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
     protected $guarded = [];
 
     public function user()
@@ -16,4 +17,3 @@ class UserActivity extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
- 

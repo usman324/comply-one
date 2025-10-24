@@ -2,16 +2,15 @@
 
 namespace App\Actions\Auth;
 
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Validator;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class LogoutAction
 {
-    use AsAction, RespondsWithJson;
+    use AsAction;
+    use RespondsWithJson;
 
     public function handle()
     {

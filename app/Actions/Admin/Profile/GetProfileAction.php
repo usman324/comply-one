@@ -5,12 +5,11 @@ namespace App\Actions\Admin\Profile;
 use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-
-class GetProfileAction 
+class GetProfileAction
 {
     use AsAction;
-    const VIEW = 'admin';
-    const URL = '/top-customers';
+    public const VIEW = 'admin';
+    public const URL = '/top-customers';
 
     public function __construct()
     {

@@ -13,7 +13,9 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class StoreUserAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'User';
     protected string $view = 'admin/user';
@@ -59,7 +61,7 @@ class StoreUserAction extends BaseAction
             if ($request->role_id) {
                 $record->assignRole($request->role_id);
             }
-            MetaUserAction::run($request,$record);
+            MetaUserAction::run($request, $record);
             DB::commit();
             return  $this->success('Record Added Successfully');
         } catch (Exception $e) {

@@ -2,14 +2,12 @@
 
 namespace App\Traits;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 trait CustomAction
 {
-    use AsAction, RespondsWithJson;
+    use AsAction;
+    use RespondsWithJson;
 
 
     public function htmlResponse(array $response)
@@ -26,5 +24,5 @@ trait CustomAction
     {
         return RespondsWithJson::getDefaultResponse($response);
     }
-   
+
 }
