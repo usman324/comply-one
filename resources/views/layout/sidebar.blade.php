@@ -39,67 +39,94 @@
                 </li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 @can('list_customer')
-                    @if (getUser()->hasRole('admin'))
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/workspaces') }}">
-                                <i class="ri-user-search-fill"></i> <span data-key="t-users">Workspace</span>
-                            </a>
-                        </li>
-                    @endif
+                @if (getUser()->hasRole('admin'))
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ url('/workspaces') }}">
+                        <i class="ri-user-search-fill"></i> <span data-key="t-users">Workspace</span>
+                    </a>
+                </li>
+                @endif
                 @endcanany
                 @can('list_customer')
-                    @if (getUser()->hasRole('workspace'))
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/customers') }}">
-                                <i class="ri-user-search-fill"></i> <span data-key="t-users">Vendors</span>
-                            </a>
-                        </li>
-                    @endif
+                @if (getUser()->hasRole('workspace'))
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ url('/customers') }}">
+                        <i class="ri-user-search-fill"></i> <span data-key="t-users">Vendors</span>
+                    </a>
+                </li>
+                @endif
                 @endcanany
                 @canany(['list_user', 'list_role'])
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controls="sidebarUsers">
-                            <i class="ri-user-settings-fill"></i>
-                            @if (getUser()->hasRole('workspace'))
-                                <span data-key="t-users">Workspace Users</span>
-                            @else
-                                <span data-key="t-users">Users Management</span>
-                            @endif
-                        </a>
-                        <div class="collapse menu-dropdown" id="sidebarUsers">
-                            <ul class="nav nav-sm flex-column">
-                                @can('list_user')
-                                    <li class="nav-item">
-                                        <a href="{{ url('users') }}" class="nav-link" data-key="t-crm"> Users </a>
-                                    </li>
-                                @endcan
-                                @can('list_role')
-                                    <li class="nav-item">
-                                        <a href="{{ url('roles') }}" class="nav-link" data-key="t-crm"> Roles </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </div>
-                    </li>
-                @endcanany
-                @if (getUser()->hasRole('admin'))
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarSetting" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controls="sidebarSetting">
-                            <i class="ri-dashboard-2-line"></i> <span data-key="t-users">Settings</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="sidebarSetting">
-                            <ul class="nav nav-sm flex-column">
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarUsers">
+                        <i class="ri-user-settings-fill"></i>
+                        @if (getUser()->hasRole('workspace'))
+                        <span data-key="t-users">Workspace Users</span>
+                        @else
+                        <span data-key="t-users">Users Management</span>
+                        @endif
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarUsers">
+                        <ul class="nav nav-sm flex-column">
+                            @can('list_user')
+                            <li class="nav-item">
+                                <a href="{{ url('users') }}" class="nav-link" data-key="t-crm"> Users </a>
+                            </li>
+                            @endcan
+                            @can('list_role')
+                            <li class="nav-item">
+                                <a href="{{ url('roles') }}" class="nav-link" data-key="t-crm"> Roles </a>
+                            </li>
+                            @endcan
+                        </ul>
+                    </div>
+                </li>
+                <!-- Questionnaires Menu -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarQuestionnaires" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarQuestionnaires">
+                        <i class="ri-questionnaire-line"></i>
+                        <span data-key="t-questionnaires">Questionnaires</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarQuestionnaires">
+                        <ul class="nav nav-sm flex-column">
+                            @can('view_questionnaire')
                                 <li class="nav-item">
-                                    <a href="{{ url('general-settings') }}" class="nav-link" data-key="t-crm">
-                                        General
-                                        Setting
+                                    <a href="{{ url('questionnaires') }}" class="nav-link" data-key="t-questionnaires-list">
+                                        <i class="ri-list-check"></i> All Questionnaires
                                     </a>
                                 </li>
-                            </ul>
-                        </div>
-                    </li>
+                            @endcan
+
+                            @can('add_questionnaire')
+                                <li class="nav-item">
+                                    <a href="{{ url('questionnaires/create') }}" class="nav-link" data-key="t-questionnaires-create">
+                                        <i class="ri-add-circle-line"></i> Create Questionnaire
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </div>
+                </li>
+                @endcanany
+                @if (getUser()->hasRole('admin'))
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarSetting" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarSetting">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-users">Settings</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarSetting">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ url('general-settings') }}" class="nav-link" data-key="t-crm">
+                                    General
+                                    Setting
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 @endif
 
             </ul>
