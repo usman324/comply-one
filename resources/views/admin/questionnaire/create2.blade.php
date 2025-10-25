@@ -1,5 +1,4 @@
-<div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
-    data-bs-keyboard="false">
+<div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-light">
@@ -197,8 +196,8 @@
                 <!-- Additional Settings -->
                 <div class="col-md-12">
                     <div class="form-check">
-                        <input class="form-check-input question-required" type="checkbox" name="questions[][is_required]"
-                            checked>
+                        <input class="form-check-input question-required" type="checkbox"
+                            name="questions[][is_required]" checked>
                         <label class="form-check-label">
                             Required Question
                         </label>
@@ -394,7 +393,8 @@
                         Swal.fire({
                             icon: 'warning',
                             title: 'Missing Options',
-                            text: 'Please add at least one option for question: ' + questionData
+                            text: 'Please add at least one option for question: ' +
+                                questionData
                                 .question
                         });
                         return false;

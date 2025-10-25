@@ -8,6 +8,7 @@ use App\Models\Questionnaire;
 use App\Models\Question;
 use App\Models\Response;
 use App\Models\Answer;
+use App\Models\QuestionnaireResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -207,12 +208,12 @@ class QuestionnaireController extends Controller
     public function index(Request $request)
     {
         if ($request->table == 1) {
-            $data = Questionnaire::with('questions')->latest();
+            $data = Questionnaire::latest();
 
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('actions', function ($record) {
-                    return view('questionnaires.actions', [
+                    return view('admin.questionnaire.include.actions', [
                         'record' => $record,
                         'url' => $this->url,
                         'permission' => $this->permission
@@ -235,7 +236,7 @@ class QuestionnaireController extends Controller
                 ->make(true);
         }
 
-        return view('questionnaires.index', [
+        return view('admin.questionnaire.index', [
             'url' => $this->url,
             'title' => $this->title,
             'permission' => $this->permission
@@ -247,8 +248,8 @@ class QuestionnaireController extends Controller
      */
     public function create()
     {
-        return view('questionnaires.create', [
-            'url' => $this->url,
+        return view('admin.questionnaire.create', [
+            'url' => url($this->url),
             'title' => $this->title
         ]);
     }
@@ -278,8 +279,9 @@ class QuestionnaireController extends Controller
         try {
             // Create questionnaire
             $questionnaire = Questionnaire::create([
+                'user_id' => getUser()->id,
                 'title' => $request->title,
-                'category' => $request->category,
+                'section' => $request->category,
                 'description' => $request->description,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
@@ -288,11 +290,11 @@ class QuestionnaireController extends Controller
                 'show_progress' => $request->has('show_progress'),
                 'randomize_questions' => $request->has('randomize_questions'),
                 'status' => 'active',
-                'created_by' => auth()->id()
             ]);
 
             // Create questions
             $questions = json_decode($request->questions, true);
+
             foreach ($questions as $index => $questionData) {
                 Question::create([
                     'questionnaire_id' => $questionnaire->id,
@@ -502,7 +504,7 @@ class QuestionnaireController extends Controller
     {
         $record = Questionnaire::with('questions')->findOrFail($id);
 
-        return view('questionnaires.edit', [
+        return view('admin.questionnaire.edit', [
             'record' => $record,
             'url' => $this->url,
             'title' => $this->title
@@ -580,7 +582,7 @@ class QuestionnaireController extends Controller
 
         $analytics = [];
         foreach ($questionnaire->questions as $question) {
-            $answers = Answer::where('question_id', $question->id)->get();
+            $answers = QuestionnaireResponse::where('question_id', $question->id)->get();
 
             $analytics[$question->id] = [
                 'question' => $question->question,
@@ -605,7 +607,7 @@ class QuestionnaireController extends Controller
             }
         }
 
-        return view('questionnaires.results', [
+        return view('admin.questionnaire.results', [
             'questionnaire' => $questionnaire,
             'analytics' => $analytics,
             'title' => $this->title

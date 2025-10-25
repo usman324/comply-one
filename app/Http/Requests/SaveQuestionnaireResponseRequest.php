@@ -11,7 +11,7 @@ class SaveQuestionnaireResponseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,19 @@ class SaveQuestionnaireResponseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'question_id' => 'required|string|exists:questionnaires,question_id',
+            'answer' => 'nullable', // Can be string, array, or null
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'question_id.required' => 'Question ID is required',
+            'question_id.exists' => 'The selected question does not exist',
         ];
     }
 }

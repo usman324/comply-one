@@ -16,17 +16,7 @@ class Questionnaire extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'section',
-        'question_id',
-        'title',
-        'message',
-        'type',
-        'options',
-        'required',
-        'placeholder',
-        'depends_on',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast.
@@ -45,6 +35,9 @@ class Questionnaire extends Model
     public function responses()
     {
         return $this->hasMany(QuestionnaireResponse::class);
+    } public function questions()
+    {
+        return $this->hasMany(Question::class);
     }
 
     /**
