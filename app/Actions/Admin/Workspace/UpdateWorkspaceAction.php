@@ -26,8 +26,6 @@ class UpdateWorkspaceAction extends BaseAction
 
     public function rules(ActionRequest $request): array
     {
-        $id = $request->route('id');
-
         return [
             'workspace_name' => 'required|string|max:255',
             'workspace_description' => 'nullable|string',
@@ -72,32 +70,31 @@ class UpdateWorkspaceAction extends BaseAction
 
             // Update questionnaire responses if provided
             if ($request->has('answers') && is_array($request->answers)) {
-                // Delete existing responses for questions that are being updated
-                $questionIds = array_keys($request->answers);
-                QuestionnaireResponse::where('workspace_id', $workspace->id)
-                    ->whereIn('question_id', $questionIds)
-                    ->delete();
-
-                // Save new responses
                 foreach ($request->answers as $question_id => $answer) {
                     if ($answer !== null && $answer !== '') {
-                        // Get the question to find questionnaire_id
-                        $question = QuestionnaireQuestion::find($question_id);
+                        // Get the question to find questionnaire_id and section
+                        $question = QuestionnaireQuestion::with('questionnaire')->find($question_id);
 
                         if ($question) {
                             // Handle array answers (checkbox, multi-select)
                             $answerValue = is_array($answer) ? json_encode($answer) : $answer;
                             $answerText = is_array($answer) ? implode(', ', $answer) : $answer;
 
-                            QuestionnaireResponse::create([
-                                'workspace_id' => $workspace->id,
-                                'user_id' => auth()->id(), // Who updated the questionnaire
-                                'questionnaire_id' => $question->questionnaire_id,
-                                'question_id' => $question_id,
-                                'answer' => $answerValue,
-                                'answer_text' => $answerText,
-                                'answered_at' => now(),
-                            ]);
+                            // Use updateOrCreate to avoid duplicate entry errors
+                            QuestionnaireResponse::updateOrCreate(
+                                [
+                                    'workspace_id' => $workspace->id,
+                                    'user_id' => auth()->id(),
+                                    'question_id' => $question_id,
+                                ],
+                                [
+                                    'section' => $question->questionnaire->section ?? null,
+                                    'questionnaire_id' => $question->questionnaire_id,
+                                    'answer' => $answerValue,
+                                    'answer_text' => $answerText,
+                                    'answered_at' => now(),
+                                ]
+                            );
                         }
                     }
                 }
@@ -108,7 +105,6 @@ class UpdateWorkspaceAction extends BaseAction
             return $this->success('Workspace updated successfully', [
                 'workspace' => [
                     'id' => $workspace->id,
-                    'name' => $workspace->name,
                     'workspace_number' => $workspace->workspace_number,
                     'type' => $workspace->type,
                     'status' => $workspace->status,
