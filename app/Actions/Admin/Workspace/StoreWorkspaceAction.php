@@ -3,7 +3,9 @@
 namespace App\Actions\Admin\Workspace;
 
 use App\Actions\BaseAction;
-use App\Models\User;
+use App\Models\Workspace;
+use App\Models\QuestionnaireResponse;
+use App\Models\Question;
 use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
@@ -21,48 +23,88 @@ class StoreWorkspaceAction extends BaseAction
     protected string $view = 'admin.workspace';
     protected string $url = 'workspaces';
     protected string $permission = 'workspace';
+
     public function rules(): array
     {
         return [
-            'first_name' => 'required',
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed'],
+            'workspace_name' => 'required|string|max:255',
+            'workspace_description' => 'nullable|string',
+            'workspace_type' => 'nullable|string|in:personal,team,enterprise',
+            'workspace_status' => 'nullable|string|in:active,inactive,pending',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'answers' => 'nullable|array',
+            'answers.*' => 'nullable',
         ];
     }
-    public function handle(
-        $request,
-    ) {
+
+    public function handle($request)
+    {
         try {
             DB::beginTransaction();
-            $image = $request->avatar;
-            $image_name = '';
-            if ($image) {
+
+            // Handle avatar upload
+            $avatar_name = '';
+            if ($request->hasFile('avatar')) {
+                $image = $request->file('avatar');
                 $name = rand(10, 100) . time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('user', $name);
-                $image_name = $name;
+                $image->storeAs('workspace', $name);
+                $avatar_name = $name;
             }
-            $user_number = generateUUID(4);
-            $record = User::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'password' => $request->email,
-                'email' => $request->email,
-                'city' => $request->city,
-                'status' => 'active',
-                'password' => bcrypt($request->password),
-                'avatar' => $image_name,
+
+            // Create workspace
+            $workspace = Workspace::create([
+                'name' => $request->workspace_name,
+                'description' => $request->workspace_description,
+                'type' => $request->workspace_type ?? 'personal',
+                'status' => $request->workspace_status ?? 'active',
+                'avatar' => $avatar_name,
+                'workspace_number' => Workspace::generateWorkspaceNumber(),
+                'owner_id' => auth()->id(),
+                'created_by' => auth()->id(),
             ]);
-            $record->update([
-                'user_number' => $user_number . $record->id
-            ]);
-            $record->assignRole('workspace');
+
+            // Save questionnaire responses if provided
+            if ($request->has('answers') && is_array($request->answers)) {
+                foreach ($request->answers as $question_id => $answer) {
+                    if ($answer !== null && $answer !== '') {
+                        // Get the question to find questionnaire_id
+                        $question = Question::find($question_id);
+
+                        if ($question) {
+                            // Handle array answers (checkbox, multi-select)
+                            $answerValue = is_array($answer) ? json_encode($answer) : $answer;
+                            $answerText = is_array($answer) ? implode(', ', $answer) : $answer;
+
+                            $questionnaire = $question->questionnaire;
+                            QuestionnaireResponse::create([
+                                'workspace_id' => $workspace->id,
+                                'user_id' => auth()->id(),
+                                'section' => $questionnaire->section,
+                                'questionnaire_id' => $questionnaire->id,
+                                'question_id' => $question_id,
+                                'answer' => $answerValue,
+                                'answer_text' => $answerText,
+                                'answered_at' => now(),
+                            ]);
+                        }
+                    }
+                }
+            }
+
             DB::commit();
-            return  $this->success('Record Added Successfully');
+
+            return $this->success('Workspace created successfully', [
+                'workspace' => [
+                    'id' => $workspace->id,
+                    'workspace_number' => $workspace->workspace_number,
+                    'type' => $workspace->type,
+                    'status' => $workspace->status,
+                ]
+            ]);
+
         } catch (Exception $e) {
             DB::rollBack();
-            return  $this->error($e->getMessage());
+            return $this->error($e->getMessage());
         }
     }
 

@@ -26,10 +26,8 @@ use App\Actions\Admin\Role\UpdateRoleAction;
 use App\Actions\Admin\User\ActivityUserListAction;
 use App\Actions\Admin\User\UpdateUserAction;
 use App\Actions\Admin\Workspace\DeleteWorkspaceAction;
-use App\Actions\Admin\Workspace\DraftWorkspaceAction;
 use App\Actions\Admin\Workspace\GetWorkspaceAction;
 use App\Actions\Admin\Workspace\GetWorkspaceListAction;
-use App\Actions\Admin\Workspace\LoadDraftWorkspaceAction;
 use App\Actions\Admin\Workspace\StoreWorkspaceAction;
 use App\Actions\Admin\Workspace\UpdateWorkspaceAction;
 use App\Actions\Auth\LogoutAction;
@@ -68,43 +66,14 @@ Route::middleware('auth')->group(function () {
     Route::get('user-activities', ActivityUserListAction::class);
 
     Route::prefix('workspaces')->name('admin.workspace.')->group(function () {
-        // List all workspaces
-        Route::get('/', GetWorkspaceListAction::class)->name('index');
-
-        // Create form
-        Route::get('/create', GetWorkspaceAction::class)->name('create');
-
-        // Store workspace with questionnaire (used by the wizard form)
-        Route::post('/create-with-questionnaire', StoreWorkspaceAction::class)->name('store-with-questionnaire');
-
-        // Regular store (if you still want to keep it)
-        Route::post('/', StoreWorkspaceAction::class)->name('store');
-
-        // Auto-save draft
-        Route::post('/auto-save', DraftWorkspaceAction::class)->name('auto-save');
-
-        // Load draft
-        Route::get('/load-draft', LoadDraftWorkspaceAction::class)->name('load-draft');
-
-        // Workspace specific routes
-        Route::prefix('/{id}')->group(function () {
-            // Show details
-            Route::get('', GetWorkspaceAction::class)->name('show');
-
-            // Edit form
-            Route::get('/edit', GetWorkspaceAction::class)->name('edit');
-
-            // Update workspace
-            Route::put('', UpdateWorkspaceAction::class)->name('update');
-
-            // Update with questionnaire (for wizard-style edit)
-            Route::put('/update-with-questionnaire', UpdateWorkspaceAction::class)->name('update-with-questionnaire');
-
-            // Delete workspace
-            Route::delete('', DeleteWorkspaceAction::class)->name('destroy');
-        });
+        Route::get('/', GetWorkspaceListAction::class);        // List all plans
+        Route::get('/create', GetWorkspaceAction::class)->name('create'); // Create form
+        Route::get('/{id}', GetWorkspaceAction::class)->name('show');     // Show details
+        Route::get('/{id}/edit', GetWorkspaceAction::class)->name('edit'); // Edit form
+        Route::post('/', StoreWorkspaceAction::class)->name('store');     // Store plan
+        Route::put('/{id}', UpdateWorkspaceAction::class)->name('update'); // Update plan
+        Route::delete('/{id}', DeleteWorkspaceAction::class)->name('destroy'); // Delete plan
     });
-
     Route::prefix('users')->name('admin.user.')->group(function () {
         Route::get('/', GetUserListAction::class);        // List all plans
         Route::get('/create', GetUserAction::class)->name('create'); // Create form

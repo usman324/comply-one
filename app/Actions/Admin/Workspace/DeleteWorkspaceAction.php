@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Workspace;
 
 use App\Actions\BaseAction;
-use App\Models\User;
+use App\Models\Workspace;
 use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
@@ -21,15 +21,22 @@ class DeleteWorkspaceAction extends BaseAction
     protected string $url = 'workspaces';
     protected string $permission = 'workspace';
 
-    public function handle(
-        int $id
-    ) {
+    public function handle(int $id)
+    {
         try {
-            $user = User::findOrFail($id);
-            $user->delete();
-            return $this->success('Record Deleted Successfully');
+            $workspace = Workspace::findOrFail($id);
+
+            // Delete avatar if exists
+            if ($workspace->avatar) {
+                deleteImage('workspace/' . $workspace->avatar, $workspace->avatar);
+            }
+
+            // Delete workspace (this will cascade delete questionnaire_responses)
+            $workspace->delete();
+
+            return $this->success('Workspace deleted successfully');
         } catch (Exception $e) {
-            return  $this->error($e->getMessage());
+            return $this->error($e->getMessage());
         }
     }
 

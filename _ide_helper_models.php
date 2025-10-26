@@ -206,6 +206,7 @@ namespace App\Models{
 /**
  * @property int $id
  * @property int $user_id
+ * @property int $workspace_id
  * @property int $questionnaire_id
  * @property string $section
  * @property string $question_id
@@ -219,6 +220,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Questionnaire $questionnaire
  * @property-read \App\Models\User $user
+ * @property-read \App\Models\Workspace $workspace
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse byQuestion(string $questionId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse bySection(string $section)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse forUser(int $userId)
@@ -239,6 +241,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereUserAgent($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereWorkspaceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse withoutTrashed()
  */
@@ -266,6 +269,7 @@ namespace App\Models{
  * @property string|null $user_number
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $password
+ * @property string|null $workspace_type
  * @property string $status
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -326,6 +330,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUserNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereWorkspaceType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutRole($roles, $guard = null)
@@ -412,5 +417,75 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession withoutTrashed()
  */
 	class UserQuestionnaireSession extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property string $workspace_number
+ * @property string $name
+ * @property string|null $description
+ * @property string $type
+ * @property string $status
+ * @property string|null $avatar
+ * @property int|null $owner_id
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $members
+ * @property-read int|null $members_count
+ * @property-read \App\Models\User|null $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuestionnaireResponse> $questionnaireResponses
+ * @property-read int|null $questionnaire_responses_count
+ * @property-read \App\Models\User|null $updater
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace byName($name)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace byStatus($status)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace byType($type)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereWorkspaceNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace withoutTrashed()
+ */
+	class Workspace extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property int|null $user_id
+ * @property string|null $session_id
+ * @property array<array-key, mixed> $draft_data
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft whereDraftData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft whereSessionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft whereUserId($value)
+ */
+	class WorkspaceDraft extends \Eloquent {}
 }
 

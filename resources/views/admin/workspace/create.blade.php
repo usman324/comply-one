@@ -539,7 +539,7 @@
         const formData = new FormData(form);
 
         // Send AJAX request
-        fetch('/api/workspaces/create-with-questionnaire', {
+        fetch('/workspaces/create-with-questionnaire', {
             method: 'POST',
             body: formData,
             headers: {
@@ -624,7 +624,7 @@
     function autoSave() {
         const formData = new FormData(form);
 
-        fetch('/api/workspaces/auto-save', {
+        fetch('/workspaces/auto-save', {
             method: 'POST',
             body: formData,
             headers: {

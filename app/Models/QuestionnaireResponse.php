@@ -18,6 +18,7 @@ class QuestionnaireResponse extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'workspace_id',
         'user_id',
         'questionnaire_id',
         'section',
@@ -70,6 +71,15 @@ class QuestionnaireResponse extends Model
                 }
             }
         });
+    }
+
+
+    /**
+     * Get the workspace that owns the response
+     */
+    public function workspace()
+    {
+        return $this->belongsTo(Workspace::class);
     }
 
     /**
@@ -159,4 +169,5 @@ class QuestionnaireResponse extends Model
 
         return $this->answer ?? '';
     }
+
 }
