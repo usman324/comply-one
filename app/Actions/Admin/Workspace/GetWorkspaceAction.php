@@ -3,6 +3,7 @@
 namespace App\Actions\Admin\Workspace;
 
 use App\Actions\BaseAction;
+use App\Models\Questionnaire;
 use App\Models\User;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;
@@ -28,6 +29,24 @@ class GetWorkspaceAction extends BaseAction
         $routeName = $request->route()->getName(); // Get the route name
         $record = $this->handle($id);
         $roles = Role::where('is_hidden', false)->get();
+
+        // Get all active questionnaires grouped by section
+        $questionnaires = Questionnaire::where('status', 'active')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->with('questions')
+            ->orderBy('section')
+            ->get();
+
+        // Group questionnaires by section
+        $questionnaireSections = $questionnaires->groupBy('section')->map(function ($sectionQuestionnaires, $section) {
+            return [
+                'name' => ucfirst(str_replace('_', ' ', $section)),
+                'slug' => $section,
+                'description' => $sectionQuestionnaires->first()->description ?? null,
+                'questions' => $sectionQuestionnaires->first()->questions ?? collect([])
+            ];
+        })->values();
 
         return match ($routeName) {
             $this->view . '.create' => view($this->view . '.create', get_defined_vars()),

@@ -6,8 +6,6 @@ use App\Http\Requests\SaveQuestionnaireResponseRequest;
 use App\Services\QuestionnaireService;
 use App\Models\Questionnaire;
 use App\Models\Question;
-use App\Models\Response;
-use App\Models\Answer;
 use App\Models\QuestionnaireResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -261,7 +259,7 @@ class QuestionnaireController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'category' => 'required|string',
+            'section' => 'required|string',
             'description' => 'nullable|string',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -279,9 +277,9 @@ class QuestionnaireController extends Controller
         try {
             // Create questionnaire
             $questionnaire = Questionnaire::create([
-                'user_id' => getUser()->id,
+                'user_id' => auth()->user()->id,
                 'title' => $request->title,
-                'section' => $request->category,
+                'section' => $request->section,
                 'description' => $request->description,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
@@ -347,8 +345,8 @@ class QuestionnaireController extends Controller
 
         // Check if user already responded (if multiple responses not allowed)
         if (!$questionnaire->allow_multiple_responses && auth()->check()) {
-            $hasResponded = Response::where('questionnaire_id', $id)
-                ->where('user_id', auth()->id())
+            $hasResponded = QuestionnaireResponse::where('questionnaire_id', $id)
+                ->where('user_id', auth()->user()->id)
                 ->exists();
 
             if ($hasResponded) {
@@ -364,12 +362,12 @@ class QuestionnaireController extends Controller
 
         // Parse options for each question
         foreach ($questions as $question) {
-            if ($question->options) {
-                $question->options = json_decode($question->options);
+            if ($question->options && is_string($question->options)) {
+                $question->options = json_decode($question->options, true);
             }
         }
 
-        return view('questionnaires.take', [
+        return view('admin.questionnaire.take', [
             'questionnaire' => $questionnaire,
             'questions' => $questions,
             'url' => $this->url,
@@ -399,17 +397,7 @@ class QuestionnaireController extends Controller
         try {
             $questionnaire = Questionnaire::findOrFail($request->questionnaire_id);
 
-            // Create response
-            $response = Response::create([
-                'questionnaire_id' => $request->questionnaire_id,
-                'user_id' => $questionnaire->allow_anonymous ? null : auth()->id(),
-                'time_spent' => $request->time_spent,
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'completed_at' => now()
-            ]);
-
-            // Save answers
+            // Save answers directly as QuestionnaireResponse records
             foreach ($request->answers as $questionId => $answer) {
                 // Handle file uploads
                 if ($request->hasFile("answers.{$questionId}")) {
@@ -423,10 +411,15 @@ class QuestionnaireController extends Controller
                     $answer = json_encode($answer);
                 }
 
-                Answer::create([
-                    'response_id' => $response->id,
+                QuestionnaireResponse::create([
+                    'questionnaire_id' => $request->questionnaire_id,
                     'question_id' => $questionId,
-                    'answer' => $answer
+                    'user_id' => $questionnaire->allow_anonymous ? null : auth()->user()->id,
+                    'section' => $questionnaire->section,
+                    'answer' => $answer,
+                    'answered_at' => now(),
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
                 ]);
             }
 
@@ -453,34 +446,24 @@ class QuestionnaireController extends Controller
         try {
             $questionnaire = Questionnaire::findOrFail($request->questionnaire_id);
 
-            // Create or update draft response
-            $response = Response::updateOrCreate(
-                [
-                    'questionnaire_id' => $request->questionnaire_id,
-                    'user_id' => auth()->id(),
-                    'is_draft' => true
-                ],
-                [
-                    'current_question' => $request->current_question,
-                    'time_spent' => $request->time_spent,
-                    'ip_address' => $request->ip(),
-                    'user_agent' => $request->userAgent()
-                ]
-            );
-
-            // Save current answers
+            // Save current answers as draft responses
             foreach ($request->answers ?? [] as $questionId => $answer) {
                 if (is_array($answer)) {
                     $answer = json_encode($answer);
                 }
 
-                Answer::updateOrCreate(
+                QuestionnaireResponse::updateOrCreate(
                     [
-                        'response_id' => $response->id,
-                        'question_id' => $questionId
+                        'questionnaire_id' => $request->questionnaire_id,
+                        'question_id' => $questionId,
+                        'user_id' => auth()->user()->id,
                     ],
                     [
-                        'answer' => $answer
+                        'section' => $questionnaire->section,
+                        'answer' => $answer,
+                        'answered_at' => now(),
+                        'ip_address' => $request->ip(),
+                        'user_agent' => $request->userAgent()
                     ]
                 );
             }
@@ -518,7 +501,7 @@ class QuestionnaireController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'category' => 'required|string',
+            'section' => 'required|string',
             'status' => 'required|in:active,inactive'
         ]);
 
@@ -533,7 +516,7 @@ class QuestionnaireController extends Controller
             $questionnaire = Questionnaire::findOrFail($id);
             $questionnaire->update($request->only([
                 'title',
-                'category',
+                'section',
                 'description',
                 'status',
                 'start_date',
@@ -578,7 +561,7 @@ class QuestionnaireController extends Controller
      */
     public function results($id)
     {
-        $questionnaire = Questionnaire::with(['questions', 'responses.answers'])->findOrFail($id);
+        $questionnaire = Questionnaire::with(['questions', 'responses'])->findOrFail($id);
 
         $analytics = [];
         foreach ($questionnaire->questions as $question) {

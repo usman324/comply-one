@@ -102,7 +102,8 @@ class UserQuestionnaireSession extends Model
      */
     public function updateProgress(): void
     {
-        $totalQuestions = Questionnaire::bySection($this->section)->count();
+        $questionnaire = Questionnaire::bySection($this->section)->first();
+        $totalQuestions = $questionnaire ? $questionnaire->questions()->count() : 0;
         $answeredQuestions = QuestionnaireResponse::forUser($this->user_id)
             ->bySection($this->section)
             ->whereNotNull('answer')
@@ -183,7 +184,7 @@ class UserQuestionnaireSession extends Model
             ],
             [
                 'status' => 'not_started',
-                'total_questions' => Questionnaire::bySection($section)->count(),
+                'total_questions' => 0,
                 'answered_questions' => 0,
                 'completion_percentage' => 0,
             ]

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Questionnaire;
+use App\Models\Question;
 use App\Models\QuestionnaireResponse;
 use App\Models\UserQuestionnaireSession;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,8 @@ class QuestionnaireService
      */
     public function saveResponse(int $userId, string $questionId, $answer): QuestionnaireResponse
     {
-        $questionnaire = Questionnaire::where('question_id', $questionId)->firstOrFail();
+        $question = Question::findOrFail($questionId);
+        $questionnaire = $question->questionnaire;
 
         return DB::transaction(function () use ($userId, $questionnaire, $questionId, $answer) {
             // Create or update response
@@ -83,13 +85,18 @@ class QuestionnaireService
      */
     public function getSectionQuestionsWithAnswers(int $userId, string $section): array
     {
-        $questions = Questionnaire::getBySection($section);
+        $questionnaire = Questionnaire::bySection($section)->first();
+        if (!$questionnaire) {
+            return [];
+        }
+
+        $questions = $questionnaire->questions()->orderBy('order')->get();
         $responses = $this->getUserSectionResponses($userId, $section);
 
         return $questions->map(function ($question) use ($responses) {
             return [
                 'question' => $question,
-                'answer' => $responses[$question->question_id] ?? null,
+                'answer' => $responses[$question->id] ?? null,
             ];
         })->toArray();
     }
@@ -122,7 +129,7 @@ class QuestionnaireService
      */
     public function getOverallProgress(int $userId): array
     {
-        $sections = Questionnaire::distinct('section')->pluck('section');
+        $sections = Questionnaire::select('section')->distinct()->pluck('section');
 
         $progress = [];
         foreach ($sections as $section) {
@@ -170,7 +177,12 @@ class QuestionnaireService
      */
     public function getVisibleQuestions(int $userId, string $section): array
     {
-        $questions = Questionnaire::getBySection($section);
+        $questionnaire = Questionnaire::bySection($section)->first();
+        if (!$questionnaire) {
+            return [];
+        }
+
+        $questions = $questionnaire->questions()->orderBy('order')->get();
         $responses = $this->getUserSectionResponses($userId, $section);
 
         return $questions->filter(function ($question) use ($responses) {
@@ -196,11 +208,11 @@ class QuestionnaireService
         $missingRequired = [];
 
         foreach ($questions as $question) {
-            if ($question['required']) {
-                $answer = $responses[$question['question_id']] ?? null;
+            if ($question->is_required) {
+                $answer = $responses[$question->id] ?? null;
 
                 if (is_null($answer) || (is_array($answer) && empty($answer)) || (is_string($answer) && trim($answer) === '')) {
-                    $missingRequired[] = $question['question_id'];
+                    $missingRequired[] = $question->id;
                 }
             }
         }
@@ -222,7 +234,7 @@ class QuestionnaireService
             return [
                 'question_id' => $response->question_id,
                 'question_title' => $response->questionnaire->title,
-                'question' => $response->questionnaire->message,
+                'question' => $response->questionnaire->description,
                 'answer' => $response->getFormattedAnswer(),
                 'answered_at' => $response->answered_at?->toDateTimeString(),
             ];

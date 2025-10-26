@@ -22,7 +22,7 @@ class SaveQuestionnaireResponseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question_id' => 'required|string|exists:questionnaires,question_id',
+            'question_id' => 'required|string|exists:questions,id',
             'answer' => 'nullable', // Can be string, array, or null
         ];
     }

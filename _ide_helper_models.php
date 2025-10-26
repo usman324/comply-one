@@ -108,6 +108,65 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * @property int $id
+ * @property int $questionnaire_id
+ * @property string|null $question
+ * @property string|null $order
+ * @property string|null $description
+ * @property string $type
+ * @property array<array-key, mixed>|null $options
+ * @property bool $is_required
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Questionnaire $questionnaire
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereIsRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereQuestion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereQuestionnaireId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question withoutTrashed()
+ */
+	class Question extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $section
+ * @property string|null $question_id
+ * @property string $title
+ * @property string $status
+ * @property \Illuminate\Support\Carbon $start_date
+ * @property \Illuminate\Support\Carbon $end_date
+ * @property string|null $description
+ * @property string|null $message
+ * @property string $type
+ * @property string|null $options
+ * @property int $required
+ * @property bool $allow_anonymous
+ * @property bool $allow_multiple_responses
+ * @property bool $show_progress
+ * @property bool $randomize_questions
+ * @property string|null $placeholder
+ * @property string|null $depends_on
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
+ * @property-read int|null $questions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuestionnaireResponse> $responses
  * @property-read int|null $responses_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire bySection(string $section)
@@ -115,7 +174,28 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire required()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereAllowAnonymous($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereAllowMultipleResponses($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereDependsOn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire wherePlaceholder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereQuestionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereRandomizeQuestions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereSection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereShowProgress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire withoutTrashed()
  */
@@ -124,8 +204,21 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @property-read \App\Models\Questionnaire|null $questionnaire
- * @property-read \App\Models\User|null $user
+ * @property int $id
+ * @property int $user_id
+ * @property int $questionnaire_id
+ * @property string $section
+ * @property string $question_id
+ * @property array<array-key, mixed>|null $answer
+ * @property string|null $answer_text
+ * @property \Illuminate\Support\Carbon|null $answered_at
+ * @property string|null $ip_address
+ * @property string|null $user_agent
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Questionnaire $questionnaire
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse byQuestion(string $questionId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse bySection(string $section)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse forUser(int $userId)
@@ -133,6 +226,19 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereAnswer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereAnswerText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereAnsweredAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereIpAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereQuestionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereQuestionnaireId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereSection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereUserAgent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse withoutTrashed()
  */
@@ -267,7 +373,20 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @property-read \App\Models\User|null $user
+ * @property int $id
+ * @property int $user_id
+ * @property string $section
+ * @property string $status
+ * @property int $total_questions
+ * @property int $answered_questions
+ * @property numeric $completion_percentage
+ * @property \Illuminate\Support\Carbon|null $started_at
+ * @property \Illuminate\Support\Carbon|null $completed_at
+ * @property array<array-key, mixed>|null $metadata
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession bySection(string $section)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession completed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession forUser(int $userId)
@@ -276,6 +395,19 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereAnsweredQuestions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereCompletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereCompletionPercentage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereMetadata($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereSection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereStartedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereTotalQuestions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UserQuestionnaireSession withoutTrashed()
  */
