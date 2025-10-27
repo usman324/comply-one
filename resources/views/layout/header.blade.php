@@ -4,21 +4,37 @@
             <div class="d-flex">
                 <!-- LOGO -->
                 <div class="navbar-brand-box horizontal-logo">
-                    <a href="index.html" class="logo logo-dark">
+                    <a href="{{url('/')}}" class="logo logo-dark">
                         <span class="logo-sm">
                             <img src="{{ gs()->getLogo() }}" alt="" height="{{ gs()->logo_height ?? '60px' }}">
+                            <span class="fs-2 fw-medium text-black mb-0"
+                                style="letter-spacing: -0.025em; text-shadow: 0 2px 8px rgba(255,255,255,0.2);">
+                                Comply<span class="fw-bold text-primary">One</span>
+                            </span>
                         </span>
                         <span class="logo-lg">
-                            <imgsrc="{{ gs()->getLogo() }}" alt="" height="{{ gs()->logo_height ?? '60px' }}">
+                            <img src="{{ gs()->getLogo() }}" alt="" height="{{ gs()->logo_height ?? '60px' }}">
+                            <span class="fs-2 fw-medium text-black mb-0"
+                                style="letter-spacing: -0.025em; text-shadow: 0 2px 8px rgba(255,255,255,0.2);">
+                                Comply<span class="fw-bold text-primary">One</span>
+                            </span>
                         </span>
                     </a>
 
-                    <a href="index.html" class="logo logo-light">
+                    <a href="{{url('/')}}" class="logo logo-light">
                         <span class="logo-sm">
                             <img src="{{ gs()->getLogo() }}" alt="" height="{{ gs()->logo_height ?? '60px' }}">
+                            <span class="fs-2 fw-medium text-black mb-0"
+                                style="letter-spacing: -0.025em; text-shadow: 0 2px 8px rgba(255,255,255,0.2);">
+                                Comply<span class="fw-bold text-primary">One</span>
+                            </span>
                         </span>
                         <span class="logo-lg">
                             <img src="{{ gs()->getLogo() }}" alt="" height="{{ gs()->logo_height ?? '60px' }}">
+                            <span class="fs-2 fw-medium text-black mb-0"
+                                style="letter-spacing: -0.025em; text-shadow: 0 2px 8px rgba(255,255,255,0.2);">
+                                Comply<span class="fw-bold text-primary">One</span>
+                            </span>
                         </span>
                     </a>
                 </div>

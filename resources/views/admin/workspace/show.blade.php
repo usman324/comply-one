@@ -103,12 +103,12 @@
             <div class="col-xxl-9">
                 <div class="card">
                     <div class="card-header">
-                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                        <ul class="nav nav-tabs nav-border-top nav-border-top-primary mb-3" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#overview" role="tab">
                                     <i class="ri-dashboard-line align-bottom me-1"></i> Overview
                                 </a>
-                            </li>
+                            </li> 
                             @foreach ($questionnaireSections as $index => $section)
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#section-{{ $section['slug'] }}"

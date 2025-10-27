@@ -104,8 +104,9 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-3">
                             <div>
+                                {{-- @dd($questionnaire) --}}
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                                    {{ $questionnaire->responses->count() > 0 ? round(($questionnaire->completedResponses->count() / $questionnaire->responses->count()) * 100) : 0 }}%
+                                    {{-- {{ count($questionnaire->responses) > 0 ? round(($questionnaire->completedResponses->count() / $questionnaire->responses->count()) * 100) : 0 }}% --}}
                                 </h4>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -122,7 +123,6 @@
         <!-- Question Analytics -->
         <div class="row">
             <div class="col-lg-12">
-                @dd($analytics)
                 @foreach ($analytics as $questionId => $data)
                     <div class="card mb-4">
                         <div class="card-header bg-light">

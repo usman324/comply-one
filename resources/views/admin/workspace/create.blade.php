@@ -16,7 +16,7 @@
                             <div class="col-lg-3">
                                 <div class="nav flex-column custom-nav nav-pills" role="tablist" aria-orientation="vertical">
                                     <!-- Step 1: Workspace Info -->
-                                    <button class="nav-link active" id="step-workspace-tab" data-bs-toggle="pill"
+                                    <button class="nav-link text-start active" id="step-workspace-tab" data-bs-toggle="pill"
                                         data-bs-target="#step-workspace" type="button" role="tab"
                                         aria-controls="step-workspace" aria-selected="true">
                                         <span class="step-title me-2">
@@ -27,7 +27,7 @@
 
                                     <!-- Dynamic Questionnaire Steps -->
                                     @foreach($questionnaireSections as $index => $section)
-                                    <button class="nav-link" id="step-{{ $section['slug'] }}-tab" data-bs-toggle="pill"
+                                    <button class="nav-link text-start" id="step-{{ $section['slug'] }}-tab" data-bs-toggle="pill"
                                         data-bs-target="#step-{{ $section['slug'] }}" type="button" role="tab"
                                         aria-controls="step-{{ $section['slug'] }}" aria-selected="false">
                                         <span class="step-title me-2">
@@ -38,7 +38,7 @@
                                     @endforeach
 
                                     <!-- Final Step: Review & Submit -->
-                                    <button class="nav-link" id="step-finish-tab" data-bs-toggle="pill"
+                                    <button class="nav-link text-start" id="step-finish-tab" data-bs-toggle="pill"
                                         data-bs-target="#step-finish" type="button" role="tab"
                                         aria-controls="step-finish" aria-selected="false">
                                         <span class="step-title me-2">
