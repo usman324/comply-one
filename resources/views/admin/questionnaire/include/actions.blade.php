@@ -20,13 +20,13 @@
                     View</a>
             </li>
         @endcan
-        @can('edit_' . $permission)
+        {{-- @can('edit_' . $permission)
             <li><a class="dropdown-item edit-item-btn" href="javascript:"
                     onclick="getEditRecord('{{ $url . '/' . $record->id . '/edit' }}','#editModel')"><i
                         class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                     Edit</a>
             </li>
-        @endcan
+        @endcan --}}
         @can('delete_' . $permission)
             <li>
                 <a class="dropdown-item remove-item-btn" href='javascript:void(0)'

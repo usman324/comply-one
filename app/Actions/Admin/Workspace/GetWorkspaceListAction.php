@@ -24,9 +24,9 @@ class GetWorkspaceListAction extends BaseAction
             $q_length = $request->length;
             $q_start = $request->start;
             $records_q = Workspace::with(['owner', 'creator'])
-                ->byName($request->name)
-                ->byType($request->type)
-                ->byStatus($request->status)
+                // ->byName($request->name)
+                // ->byType($request->type)
+                // ->byStatus($request->status)
                 ->latest();
             $total_records = $records_q->count();
             if ($q_length > 0) {

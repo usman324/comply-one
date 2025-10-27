@@ -15,18 +15,18 @@
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
         @can('edit_' . $permission)
-            <li><a class="dropdown-item edit-item-btn" href="{{ $url . '/' . $record->id }}"
-                    {{-- onclick="getEditRecord('{{ $url . '/' . $record->id . '/edit' }}','#editModel')" --}}
-                    ><i
+            <li><a class="dropdown-item edit-item-btn" href="{{ $url . '/' . $record->id . '/assign-questions' }}"
+                    {{-- onclick="getEditRecord('{{ $url . '/' . $record->id . '/edit' }}','#editModel')" --}}><i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                    Assign Questions</a>
+            </li>
+            <li><a class="dropdown-item edit-item-btn" href="{{ $url . '/' . $record->id }}" {{-- onclick="getEditRecord('{{ $url . '/' . $record->id . '/edit' }}','#editModel')" --}}><i
                         class="ri-eye-fill align-bottom me-2 text-muted"></i>
                     View</a>
             </li>
         @endcan
-         @can('edit_' . $permission)
+        @can('edit_' . $permission)
             <li><a class="dropdown-item edit-item-btn" href="{{ $url . '/' . $record->id . '/edit' }}"
-                    {{-- onclick="getEditRecord('{{ $url . '/' . $record->id . '/edit' }}','#editModel')" --}}
-                    ><i
-                        class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                    {{-- onclick="getEditRecord('{{ $url . '/' . $record->id . '/edit' }}','#editModel')" --}}><i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                     Edit</a>
             </li>
         @endcan
