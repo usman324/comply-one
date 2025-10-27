@@ -56,6 +56,29 @@ class Workspace extends Model
     /**
      * Get required questions for this workspace
      */
+
+    public static function generateWorkspaceNumber()
+    {
+        $prefix = 'COMPLYONE';
+
+        // Get the last workspace number
+        $lastWorkspace = self::withTrashed()
+            ->where('workspace_number', 'like', "{$prefix}-%")
+            ->orderBy('workspace_number', 'desc')
+            ->first();
+
+        if ($lastWorkspace) {
+            // Extract the sequence number and increment
+            $lastNumber = (int) substr($lastWorkspace->workspace_number, strlen($prefix) + 1);
+            $newNumber = $lastNumber + 1;
+        } else {
+            // Start with 1
+            $newNumber = 1;
+        }
+
+        // Format: COMPLYONE-000001
+        return sprintf('%s-%06d', $prefix, $newNumber);
+    }
     public function requiredQuestions()
     {
         return $this->questions()
