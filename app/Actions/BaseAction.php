@@ -10,10 +10,10 @@ class BaseAction
     use AsAction;
     use RespondsWithJson;
 
-    protected string $title;
-    protected string $view;
-    protected string $url;
-    protected string $permission;
+    protected string $title = '';
+    protected string $view = '';
+    protected string $url = '/';
+    protected string $permission = '';
 
     public function __construct()
     {
