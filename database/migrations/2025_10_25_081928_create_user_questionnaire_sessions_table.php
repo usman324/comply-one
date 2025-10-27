@@ -24,8 +24,6 @@ return new class () extends Migration {
             $table->timestamps();
             $table->softDeletes();
 
-            // Composite unique index
-            $table->unique(['user_id', 'section'], 'user_section_unique');
         });
     }
 

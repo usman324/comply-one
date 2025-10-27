@@ -28,7 +28,6 @@ return new class () extends Migration {
             // Composite indexes for better query performance
             $table->index(['user_id', 'section']);
             $table->index(['user_id', 'question_id']);
-            $table->unique(['user_id', 'questionnaire_id', 'question_id'], 'user_questionnaire_question_unique');
         });
     }
 

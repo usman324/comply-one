@@ -3,9 +3,9 @@
 namespace App\Actions\Admin\Workspace;
 
 use App\Actions\BaseAction;
+use App\Models\Question;
 use App\Models\Workspace;
 use App\Models\QuestionnaireResponse;
-use App\Models\QuestionnaireQuestion;
 use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
@@ -27,10 +27,10 @@ class UpdateWorkspaceAction extends BaseAction
     public function rules(ActionRequest $request): array
     {
         return [
-            'workspace_name' => 'required|string|max:255',
-            'workspace_description' => 'nullable|string',
-            'workspace_type' => 'nullable|string|in:personal,team,enterprise',
-            'workspace_status' => 'nullable|string|in:active,inactive,pending',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'type' => 'nullable|string|in:personal,team,enterprise',
+            'status' => 'nullable|string|in:active,inactive,pending',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'answers' => 'nullable|array',
             'answers.*' => 'nullable',
@@ -60,10 +60,10 @@ class UpdateWorkspaceAction extends BaseAction
 
             // Update workspace details
             $workspace->update([
-                'name' => $request->workspace_name,
-                'description' => $request->workspace_description ?? $workspace->description,
-                'type' => $request->workspace_type ?? $workspace->type,
-                'status' => $request->workspace_status ?? $workspace->status,
+                'name' => $request->name,
+                'description' => $request->description ?? $workspace->description,
+                'type' => $request->type ?? $workspace->type,
+                'status' => $request->status ?? $workspace->status,
                 'avatar' => $avatar_name,
                 'updated_by' => auth()->id(),
             ]);
@@ -73,7 +73,7 @@ class UpdateWorkspaceAction extends BaseAction
                 foreach ($request->answers as $question_id => $answer) {
                     if ($answer !== null && $answer !== '') {
                         // Get the question to find questionnaire_id and section
-                        $question = QuestionnaireQuestion::with('questionnaire')->find($question_id);
+                        $question = Question::with('questionnaire')->find($question_id);
 
                         if ($question) {
                             // Handle array answers (checkbox, multi-select)
@@ -105,6 +105,7 @@ class UpdateWorkspaceAction extends BaseAction
             return $this->success('Workspace updated successfully', [
                 'workspace' => [
                     'id' => $workspace->id,
+                     'name' => $workspace->name,
                     'workspace_number' => $workspace->workspace_number,
                     'type' => $workspace->type,
                     'status' => $workspace->status,
@@ -113,6 +114,7 @@ class UpdateWorkspaceAction extends BaseAction
 
         } catch (Exception $e) {
             DB::rollBack();
+            report($e);
             return $this->error($e->getMessage());
         }
     }

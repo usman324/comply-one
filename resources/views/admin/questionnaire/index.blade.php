@@ -20,7 +20,7 @@
                                     <tr>
                                         <th style="width: 20px;"></th>
                                         <th>Title</th>
-                                        <th>Category</th>
+                                        <th>Section</th>
                                         <th>Questions</th>
                                         <th>Responses</th>
                                         <th>Status</th>

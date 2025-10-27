@@ -122,6 +122,7 @@
         <!-- Question Analytics -->
         <div class="row">
             <div class="col-lg-12">
+                @dd($analytics)
                 @foreach ($analytics as $questionId => $data)
                     <div class="card mb-4">
                         <div class="card-header bg-light">

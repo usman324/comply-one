@@ -96,6 +96,7 @@ class StoreWorkspaceAction extends BaseAction
             return $this->success('Workspace created successfully', [
                 'workspace' => [
                     'id' => $workspace->id,
+                    'name' => $workspace->name,
                     'workspace_number' => $workspace->workspace_number,
                     'type' => $workspace->type,
                     'status' => $workspace->status,
@@ -104,6 +105,7 @@ class StoreWorkspaceAction extends BaseAction
 
         } catch (Exception $e) {
             DB::rollBack();
+            report($e);
             return $this->error($e->getMessage());
         }
     }

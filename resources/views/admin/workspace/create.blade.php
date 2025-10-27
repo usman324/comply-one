@@ -550,7 +550,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showSuccessPage(data.workspace);
+                showSuccessPage(data.data.workspace);
             } else {
                 throw new Error(data.message || 'Submission failed');
             }
@@ -567,6 +567,8 @@
      * Show success page after submission
      */
     function showSuccessPage(workspace) {
+        console.log(workspace);
+        
         const finishPane = document.getElementById('step-finish');
         finishPane.innerHTML = `
             <div class="text-center pt-4 pb-2">

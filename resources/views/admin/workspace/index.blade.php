@@ -24,8 +24,7 @@
                                     <tr>
                                         <th style="width: 20px;"></th>
                                         <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
+                                        <th>Type</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -80,10 +79,8 @@
 
                     {
                         data: 'name'
-                    }, {
-                        data: 'email'
-                    }, {
-                        data: 'phone'
+                    },  {
+                        data: 'type'
                     },  {
                         data: 'status'
                     },

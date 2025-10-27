@@ -3,6 +3,7 @@
 namespace App\Actions\Admin\Workspace;
 
 use App\Actions\BaseAction;
+use App\Models\QuestionnaireResponse;
 use App\Models\Workspace;
 use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
@@ -30,7 +31,7 @@ class DeleteWorkspaceAction extends BaseAction
             if ($workspace->avatar) {
                 deleteImage('workspace/' . $workspace->avatar, $workspace->avatar);
             }
-
+            QuestionnaireResponse::where('workspace_id', $id)->delete();
             // Delete workspace (this will cascade delete questionnaire_responses)
             $workspace->delete();
 

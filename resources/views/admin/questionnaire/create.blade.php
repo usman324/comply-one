@@ -36,10 +36,10 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                         <div class="col-md-3 mb-3">
-                                            <label class="form-label">Category <span class="text-danger">*</span></label>
-                                            <select class="form-control form-control-sm select2" name="category" required>
-                                                <option value="">Select Category</option>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label">Section <span class="text-danger">*</span></label>
+                                            <select class="form-control form-control-sm select2" name="section" required>
+                                                <option value="">Select Section</option>
                                                 <option value="customer_feedback">Customer Feedback</option>
                                                 <option value="employee_survey">Employee Survey</option>
                                                 <option value="market_research">Market Research</option>
@@ -53,8 +53,8 @@
                                             <input type="text" class="form-control form-control-sm" name="title"
                                                 placeholder="e.g., Customer Satisfaction Survey" required />
                                         </div>
-                                       
-                                         <div class="col-md-3 mb-3">
+
+                                        <div class="col-md-3 mb-3">
                                             <label class="form-label">Start Date</label>
                                             <input type="date" class="form-control form-control-sm" name="start_date" />
                                         </div>
@@ -67,7 +67,7 @@
                                             <textarea class="form-control form-control-sm" name="description" rows="3"
                                                 placeholder="Brief description of what this questionnaire is about..."></textarea>
                                         </div>
-                                       
+
                                     </div>
                                 </div>
                             </div>
@@ -180,8 +180,8 @@
                 <div class="row">
                     <div class="col-md-8 mb-3">
                         <label class="form-label">Question Text <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-sm question-text" name="questions[][question]"
-                            placeholder="Enter your question here..." required />
+                        <input type="text" class="form-control form-control-sm question-text"
+                            name="questions[][question]" placeholder="Enter your question here..." required />
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Question Type <span class="text-danger">*</span></label>
@@ -199,8 +199,8 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <label class="form-label">Description (Optional)</label>
-                        <input type="text" class="form-control form-control-sm question-description" name="questions[][description]"
-                            placeholder="Add helper text or instructions..." />
+                        <input type="text" class="form-control form-control-sm question-description"
+                            name="questions[][description]" placeholder="Add helper text or instructions..." />
                     </div>
 
                     <!-- Options Container (for radio, checkbox, select) -->
@@ -208,7 +208,8 @@
                         <label class="form-label">Options <span class="text-danger">*</span></label>
                         <div class="options-list">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control form-control-sm option-input" placeholder="Option 1" />
+                                <input type="text" class="form-control form-control-sm option-input"
+                                    placeholder="Option 1" />
                                 <button class="btn btn-outline-danger remove-option" type="button">
                                     <i class="ri-close-line"></i>
                                 </button>

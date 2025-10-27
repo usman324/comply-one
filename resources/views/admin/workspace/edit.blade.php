@@ -66,33 +66,33 @@
                                                 <div class="col-md-12">
                                                     <label for="workspace_name" class="form-label">Workspace Name <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control" id="workspace_name"
-                                                        name="workspace_name" placeholder="Enter workspace name"
-                                                        value="{{ old('workspace_name', $record->first_name) }}" required>
+                                                        name="name" placeholder="Enter workspace name"
+                                                        value="{{ old('name', $record->name) }}" required>
                                                     <div class="invalid-feedback">Please enter workspace name</div>
                                                 </div>
 
                                                 <div class="col-md-12">
                                                     <label for="workspace_description" class="form-label">Description</label>
                                                     <textarea class="form-control" id="workspace_description"
-                                                        name="workspace_description" rows="3"
-                                                        placeholder="Brief description of your workspace">{{ old('workspace_description', $record->address) }}</textarea>
+                                                        name="description" rows="3"
+                                                        placeholder="Brief description of your workspace">{{ old('description', $record->description) }}</textarea>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <label for="workspace_type" class="form-label">Workspace Type</label>
-                                                    <select class="form-select" id="workspace_type" name="workspace_type">
+                                                    <select class="form-select" id="workspace_type" name="type">
                                                         <option value="">Select Type</option>
-                                                        <option value="personal" {{ old('workspace_type', $record->workspace_type) == 'personal' ? 'selected' : '' }}>Personal</option>
-                                                        <option value="team" {{ old('workspace_type', $record->workspace_type) == 'team' ? 'selected' : '' }}>Team</option>
-                                                        <option value="enterprise" {{ old('workspace_type', $record->workspace_type) == 'enterprise' ? 'selected' : '' }}>Enterprise</option>
+                                                        <option value="personal" {{ old('type', $record->type) == 'personal' ? 'selected' : '' }}>Personal</option>
+                                                        <option value="team" {{ old('type', $record->type) == 'team' ? 'selected' : '' }}>Team</option>
+                                                        <option value="enterprise" {{ old('type', $record->type) == 'enterprise' ? 'selected' : '' }}>Enterprise</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <label for="workspace_status" class="form-label">Status</label>
-                                                    <select class="form-select" id="workspace_status" name="workspace_status">
-                                                        <option value="active" {{ old('workspace_status', $record->status) == 'active' ? 'selected' : '' }}>Active</option>
-                                                        <option value="inactive" {{ old('workspace_status', $record->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                                    <select class="form-select" id="workspace_status" name="status">
+                                                        <option value="active" {{ old('status', $record->status) == 'active' ? 'selected' : '' }}>Active</option>
+                                                        <option value="inactive" {{ old('status', $record->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -156,7 +156,7 @@
                                                             name="answers[{{ $question->id }}]"
                                                             {{ $question->is_required ? 'required' : '' }}>
                                                             <option value="">Select an option</option>
-                                                            @foreach(json_decode($question->options, true) as $option)
+                                                            @foreach($question->options as $option)
                                                                 <option value="{{ $option }}" {{ old('answers.'.$question->id, $existingAnswer) == $option ? 'selected' : '' }}>
                                                                     {{ $option }}
                                                                 </option>
@@ -164,7 +164,7 @@
                                                         </select>
 
                                                     @elseif($question->type === 'radio')
-                                                        @foreach(json_decode($question->options, true) as $optionIndex => $option)
+                                                        @foreach($question->options as $optionIndex => $option)
                                                         <div class="form-check">
                                                             <input class="form-check-input"
                                                                 type="radio"
@@ -183,7 +183,7 @@
                                                         @php
                                                             $existingAnswerArray = is_array($existingAnswer) ? $existingAnswer : [];
                                                         @endphp
-                                                        @foreach(json_decode($question->options, true) as $optionIndex => $option)
+                                                        @foreach($question->options as $optionIndex => $option)
                                                         <div class="form-check">
                                                             <input class="form-check-input"
                                                                 type="checkbox"
@@ -470,7 +470,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showSuccessPage(data.workspace);
+                showSuccessPage(data.data.workspace);
             } else {
                 throw new Error(data.message || 'Update failed');
             }
