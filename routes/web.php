@@ -208,8 +208,8 @@ Route::get('clear-cache', function () {
     \Artisan::call('optimize:clear');
     return back();
 });
-Route::get('seed', function () {
-    \Artisan::call('db:seed');
+Route::get('storage', function () {
+    \Artisan::call('storage:link');
     return back();
 });
 
