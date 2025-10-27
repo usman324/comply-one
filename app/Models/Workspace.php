@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Workspace extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -47,7 +48,7 @@ class Workspace extends Model
         return $this->questions()
             ->with('section')
             ->get()
-            ->groupBy(function($question) {
+            ->groupBy(function ($question) {
                 return $question->section ? $question->section->name : 'Uncategorized';
             });
     }
@@ -127,10 +128,10 @@ class Workspace extends Model
     public function getResponsesBySection()
     {
         $responses = $this->questionnaireResponses()->with('question.section')->get();
-        
-        return $responses->groupBy(function($response) {
-            return $response->question->section 
-                ? $response->question->section->name 
+
+        return $responses->groupBy(function ($response) {
+            return $response->question->section
+                ? $response->question->section->name
                 : 'Uncategorized';
         });
     }
@@ -141,12 +142,14 @@ class Workspace extends Model
     public function getCompletionPercentage()
     {
         $totalQuestions = $this->questions()->count();
-        if ($totalQuestions === 0) return 0;
-        
+        if ($totalQuestions === 0) {
+            return 0;
+        }
+
         $answeredQuestions = $this->questionnaireResponses()
             ->whereIn('question_id', $this->questions()->pluck('id'))
             ->count();
-        
+
         return round(($answeredQuestions / $totalQuestions) * 100, 2);
     }
 
@@ -159,7 +162,7 @@ class Workspace extends Model
         $answeredRequired = $this->questionnaireResponses()
             ->whereIn('question_id', $requiredQuestions)
             ->count();
-        
+
         return $answeredRequired === $requiredQuestions->count();
     }
 
@@ -208,7 +211,7 @@ class Workspace extends Model
             'team' => '<span class="badge bg-primary-subtle text-primary">Team</span>',
             'enterprise' => '<span class="badge bg-purple-subtle text-purple">Enterprise</span>',
         ];
-        
+
         return $badges[$this->type] ?? '<span class="badge bg-secondary">Unknown</span>';
     }
 
@@ -222,7 +225,7 @@ class Workspace extends Model
             'inactive' => '<span class="badge bg-danger">Inactive</span>',
             'pending' => '<span class="badge bg-warning">Pending</span>',
         ];
-        
+
         return $badges[$this->status] ?? '<span class="badge bg-secondary">Unknown</span>';
     }
 

@@ -109,7 +109,7 @@ Route::middleware('auth')->group(function () {
             ->name('assign-questions.form');
 
         Route::post('/{workspace}/assign-questions', AssignQuestionsToWorkspaceAction::class)
-            ;
+        ;
 
         Route::put('/{workspace}/questions/{question}', [WorkspaceQuestionController::class, 'updateQuestionSettings'])
             ->name('questions.update-settings');

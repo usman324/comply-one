@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Question extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'questionnaire_id',
@@ -52,9 +53,11 @@ class Question extends Model
     public function getWorkspaceSettings($workspaceId)
     {
         $pivot = $this->workspaces()->where('workspace_id', $workspaceId)->first()?->pivot;
-        
-        if (!$pivot) return null;
-        
+
+        if (!$pivot) {
+            return null;
+        }
+
         return [
             'order' => $pivot->order,
             'is_required' => $pivot->is_required || $this->is_required,
@@ -116,13 +119,13 @@ class Question extends Model
     public function getResponseStats($workspaceId = null)
     {
         $query = $this->responses();
-        
+
         if ($workspaceId) {
             $query->where('workspace_id', $workspaceId);
         }
-        
+
         $responses = $query->get();
-        
+
         return [
             'total' => $responses->count(),
             'unique_answers' => $responses->pluck('answer')->unique()->count(),
@@ -137,8 +140,10 @@ class Question extends Model
     {
         if ($workspaceId) {
             $workspace = Workspace::find($workspaceId);
-            if (!$workspace) return 0;
-            
+            if (!$workspace) {
+                return 0;
+            }
+
             $totalWorkspaces = 1;
             $answered = $this->responses()->where('workspace_id', $workspaceId)->exists() ? 1 : 0;
         } else {
@@ -146,7 +151,7 @@ class Question extends Model
             $answeredWorkspaces = $this->responses()->distinct('workspace_id')->count('workspace_id');
             $answered = $answeredWorkspaces;
         }
-        
+
         return $totalWorkspaces > 0 ? round(($answered / $totalWorkspaces) * 100, 2) : 0;
     }
 
@@ -158,7 +163,7 @@ class Question extends Model
         if (is_string($this->options)) {
             return json_decode($this->options, true) ?: [];
         }
-        
+
         return $this->options ?: [];
     }
 
@@ -178,7 +183,7 @@ class Question extends Model
         if (is_string($this->validation_rules)) {
             return json_decode($this->validation_rules, true) ?: [];
         }
-        
+
         return $this->validation_rules ?: [];
     }
 
@@ -190,7 +195,7 @@ class Question extends Model
         $name = $name ?: "question_{$this->id}";
         $required = $this->is_required ? 'required' : '';
         $placeholder = $this->placeholder ?: $this->question;
-        
+
         // Get workspace-specific settings if applicable
         if ($workspaceId) {
             $settings = $this->getWorkspaceSettings($workspaceId);
@@ -202,19 +207,19 @@ class Question extends Model
         switch ($this->type) {
             case 'text':
                 return "<input type='text' class='form-control' name='{$name}' placeholder='{$placeholder}' value='{$value}' {$required}>";
-            
+
             case 'textarea':
                 return "<textarea class='form-control' name='{$name}' rows='3' placeholder='{$placeholder}' {$required}>{$value}</textarea>";
-            
+
             case 'number':
                 return "<input type='number' class='form-control' name='{$name}' placeholder='{$placeholder}' value='{$value}' {$required}>";
-            
+
             case 'email':
                 return "<input type='email' class='form-control' name='{$name}' placeholder='{$placeholder}' value='{$value}' {$required}>";
-            
+
             case 'date':
                 return "<input type='date' class='form-control' name='{$name}' value='{$value}' {$required}>";
-            
+
             case 'select':
                 $html = "<select class='form-select' name='{$name}' {$required}>";
                 $html .= "<option value=''>Select an option</option>";
@@ -224,7 +229,7 @@ class Question extends Model
                 }
                 $html .= "</select>";
                 return $html;
-            
+
             case 'radio':
                 $html = "<div class='radio-group'>";
                 foreach ($this->getOptionsArray() as $option) {
@@ -236,7 +241,7 @@ class Question extends Model
                 }
                 $html .= "</div>";
                 return $html;
-            
+
             case 'checkbox':
                 $values = is_array($value) ? $value : [];
                 $html = "<div class='checkbox-group'>";
@@ -249,7 +254,7 @@ class Question extends Model
                 }
                 $html .= "</div>";
                 return $html;
-            
+
             default:
                 return "<input type='text' class='form-control' name='{$name}' value='{$value}' {$required}>";
         }

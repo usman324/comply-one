@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class AssignQuestionsToWorkspaceAction  extends BaseAction
+class AssignQuestionsToWorkspaceAction extends BaseAction
 {
-     protected string $title = 'Workspace';
+    protected string $title = 'Workspace';
     protected string $view = 'admin.workspace';
     protected string $url = 'workspaces';
     protected string $permission = 'workspace';
@@ -28,22 +28,22 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
             DB::beginTransaction();
 
             $workspace = Workspace::findOrFail($workspaceId);
-            
+
             // Prepare sync data with pivot attributes
             $syncData = [];
             foreach ($questionsData as $index => $questionData) {
                 $questionId = is_array($questionData) ? ($questionData['id'] ?? $questionData['question_id']) : $questionData;
-                
+
                 // Verify question exists
                 if (!Question::find($questionId)) {
                     continue;
                 }
-                
+
                 $syncData[$questionId] = [
                     'order' => $questionData['order'] ?? $index,
                     'is_required' => $questionData['is_required'] ?? false,
-                    'workspace_specific_options' => isset($questionData['workspace_specific_options']) 
-                        ? json_encode($questionData['workspace_specific_options']) 
+                    'workspace_specific_options' => isset($questionData['workspace_specific_options'])
+                        ? json_encode($questionData['workspace_specific_options'])
                         : null,
                 ];
             }
@@ -65,7 +65,7 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error assigning questions to workspace: ' . $e->getMessage());
-            
+
             return [
                 'success' => false,
                 'message' => 'Failed to assign questions: ' . $e->getMessage(),
@@ -107,8 +107,8 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
             $workspace->questions()->attach($questionId, [
                 'order' => $settings['order'] ?? $workspace->questions()->count(),
                 'is_required' => $settings['is_required'] ?? false,
-                'workspace_specific_options' => isset($settings['workspace_specific_options']) 
-                    ? json_encode($settings['workspace_specific_options']) 
+                'workspace_specific_options' => isset($settings['workspace_specific_options'])
+                    ? json_encode($settings['workspace_specific_options'])
                     : null,
             ]);
 
@@ -119,7 +119,7 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
 
         } catch (\Exception $e) {
             Log::error('Error attaching question: ' . $e->getMessage());
-            
+
             return [
                 'success' => false,
                 'message' => 'Failed to attach question: ' . $e->getMessage(),
@@ -143,7 +143,7 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
 
         } catch (\Exception $e) {
             Log::error('Error detaching question: ' . $e->getMessage());
-            
+
             return [
                 'success' => false,
                 'message' => 'Failed to remove question: ' . $e->getMessage(),
@@ -162,8 +162,8 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
             $workspace->questions()->updateExistingPivot($questionId, [
                 'order' => $settings['order'] ?? null,
                 'is_required' => $settings['is_required'] ?? null,
-                'workspace_specific_options' => isset($settings['workspace_specific_options']) 
-                    ? json_encode($settings['workspace_specific_options']) 
+                'workspace_specific_options' => isset($settings['workspace_specific_options'])
+                    ? json_encode($settings['workspace_specific_options'])
                     : null,
             ]);
 
@@ -174,7 +174,7 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
 
         } catch (\Exception $e) {
             Log::error('Error updating question settings: ' . $e->getMessage());
-            
+
             return [
                 'success' => false,
                 'message' => 'Failed to update settings: ' . $e->getMessage(),
@@ -208,7 +208,7 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error reordering questions: ' . $e->getMessage());
-            
+
             return [
                 'success' => false,
                 'message' => 'Failed to reorder questions: ' . $e->getMessage(),
@@ -248,7 +248,7 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error copying questions: ' . $e->getMessage());
-            
+
             return [
                 'success' => false,
                 'message' => 'Failed to copy questions: ' . $e->getMessage(),
@@ -284,7 +284,7 @@ class AssignQuestionsToWorkspaceAction  extends BaseAction
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error bulk assigning questions: ' . $e->getMessage());
-            
+
             return [
                 'success' => false,
                 'message' => 'Failed to bulk assign questions: ' . $e->getMessage(),

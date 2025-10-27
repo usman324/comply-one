@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Workspace;
 use App\Models\Question;
-use App\Models\Section;
 use App\Actions\Admin\Workspace\AssignQuestionsToWorkspaceAction;
 use App\Models\Questionnaire;
 use Illuminate\Http\Request;
@@ -24,15 +23,15 @@ class WorkspaceQuestionController extends Controller
     public function showAssignForm(Workspace $workspace)
     {
         $workspace->load(['questions']);
-        
+
         // Get all available questions
         $availableQuestions = Question::with(['questionnaire', 'workspaces'])
             ->ordered()
             ->get();
-        
+
         // Get all questionnaires for filtering
         $questionnaires = Questionnaire::orderBy('title')->get();
-        
+
         return view('admin.workspace.assign-questions', [
             'workspace' => $workspace,
             'availableQuestions' => $availableQuestions,
@@ -193,7 +192,7 @@ class WorkspaceQuestionController extends Controller
     public function getAvailableQuestions(Workspace $workspace)
     {
         $assignedQuestionIds = $workspace->questions()->pluck('questions.id');
-        
+
         $questions = Question::with('questionnaire')
             ->whereNotIn('id', $assignedQuestionIds)
             ->ordered()
