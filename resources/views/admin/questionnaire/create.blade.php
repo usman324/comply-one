@@ -37,15 +37,25 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-3 mb-3">
-                                            <label class="form-label">Section <span class="text-danger">*</span></label>
-                                            <select class="form-control form-control-sm select2" name="section" required>
+                                            <label class="form-label">Section <span class="text-danger">*</span>
+                                                <a href="javascript:"
+                                                    onclick="getAddRecord('{{ url('sections/create?select_id=section_id') }}','#addModel')"
+                                                    class="me-2"><i style="font-size: medium;"
+                                                        class="ri-add-circle-line me-2"></i>
+                                                </a></label>
+                                            <select class="form-control form-control-sm select2" id="section_id"
+                                                style=" text-transform:uppercase;" name="section_id" required>
                                                 <option value="">Select Section</option>
-                                                <option value="customer_feedback">Customer Feedback</option>
+                                                @foreach (sections() as $section)
+                                                    <option value="{{ $section->id }}">
+                                                        {{ str_replace('_', ' ', $section->name) }}</option>
+                                                @endforeach
+                                                {{-- <option value="customer_feedback">Customer Feedback</option>
                                                 <option value="employee_survey">Employee Survey</option>
                                                 <option value="market_research">Market Research</option>
                                                 <option value="event_feedback">Event Feedback</option>
                                                 <option value="product_feedback">Product Feedback</option>
-                                                <option value="other">Other</option>
+                                                <option value="other">Other</option> --}}
                                             </select>
                                         </div>
                                         <div class="col-md-3 mb-3">
@@ -235,6 +245,10 @@
             </div>
         </div>
     </template>
+
+      <div id="addRecord">
+
+    </div>
 @endsection
 
 @section('script')

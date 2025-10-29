@@ -13,7 +13,8 @@ return new class () extends Migration {
         Schema::create('questionnaires', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
-            $table->string('section')->index();
+            $table->unsignedBigInteger('section_id')->index();
+            // $table->string('section')->index();
             $table->string('question_id')->nullable()->unique();
             $table->string('title');
             $table->string('status');

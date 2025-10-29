@@ -27,10 +27,10 @@ class StoreWorkspaceAction extends BaseAction
     public function rules(): array
     {
         return [
-            'workspace_name' => 'required|string|max:255',
-            'workspace_description' => 'nullable|string',
-            'workspace_type' => 'nullable|string|in:personal,team,enterprise',
-            'workspace_status' => 'nullable|string|in:active,inactive,pending',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'type' => 'nullable|string|in:personal,team,enterprise',
+            'status' => 'nullable|string|in:active,inactive,pending',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'answers' => 'nullable|array',
             'answers.*' => 'nullable',
@@ -53,10 +53,10 @@ class StoreWorkspaceAction extends BaseAction
 
             // Create workspace
             $workspace = Workspace::create([
-                'name' => $request->workspace_name,
-                'description' => $request->workspace_description,
-                'type' => $request->workspace_type ?? 'personal',
-                'status' => $request->workspace_status ?? 'active',
+                'name' => $request->name,
+                'description' => $request->description,
+                'type' => $request->type ?? 'personal',
+                'status' => $request->status ?? 'active',
                 'avatar' => $avatar_name,
                 'workspace_number' => Workspace::generateWorkspaceNumber(),
                 'owner_id' => auth()->id(),
@@ -102,7 +102,6 @@ class StoreWorkspaceAction extends BaseAction
                     'status' => $workspace->status,
                 ]
             ]);
-
         } catch (Exception $e) {
             DB::rollBack();
             report($e);

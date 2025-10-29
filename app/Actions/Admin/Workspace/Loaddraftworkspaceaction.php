@@ -7,6 +7,7 @@ use App\Models\WorkspaceDraft;
 use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
+use Exception;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class LoadDraftWorkspaceAction extends BaseAction

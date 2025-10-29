@@ -6,6 +6,7 @@ use App\Actions\BaseAction;
 use App\Models\Questionnaire;
 use App\Models\Workspace;
 use App\Models\QuestionnaireResponse;
+use App\Models\Section;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -33,17 +34,16 @@ class GetWorkspaceAction extends BaseAction
 
         // Get all active questionnaires grouped by section
         $questionnaires = Questionnaire::where('status', 'active')
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
-            ->with('questions')
-            ->orderBy('section')
+            // ->where('start_date', '<=', now())
+            // ->where('end_date', '>=', now())
+            ->with(['questions','section'])
+            ->orderBy('section_id')
             ->get();
-
         // Group questionnaires by section and process questions
-        $questionnaireSections = $questionnaires->groupBy('section')->map(function ($sectionQuestionnaires, $section) {
+        $questionnaireSections = $questionnaires->groupBy('section_id')->map(function ($sectionQuestionnaires, $q_section) {
             // Get questions and ensure options are properly formatted
             $questions = $sectionQuestionnaires->first()->questions ?? collect([]);
-
+            $section = Section::find($q_section)?->name;
             // Process each question to ensure options are arrays
             $questions = $questions->map(function ($question) {
                 // If options exists and is a string, decode it
@@ -59,7 +59,6 @@ class GetWorkspaceAction extends BaseAction
                 }
                 return $question;
             });
-
             return [
                 'name' => ucfirst(str_replace('_', ' ', $section)),
                 'slug' => $section,

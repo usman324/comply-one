@@ -23,6 +23,11 @@ use App\Actions\Admin\User\GetUserListAction;
 use App\Actions\Admin\Role\StoreRoleAction;
 use App\Actions\Admin\User\StoreUserAction;
 use App\Actions\Admin\Role\UpdateRoleAction;
+use App\Actions\Admin\Section\DeleteSectionAction;
+use App\Actions\Admin\Section\GetSectionAction;
+use App\Actions\Admin\Section\GetSectionListAction;
+use App\Actions\Admin\Section\StoreSectionAction;
+use App\Actions\Admin\Section\UpdateSectionAction;
 use App\Actions\Admin\User\ActivityUserListAction;
 use App\Actions\Admin\User\UpdateUserAction;
 use App\Actions\Admin\Workspace\DeleteWorkspaceAction;
@@ -69,6 +74,15 @@ Route::middleware('auth')->group(function () {
     Route::post('profile/{id}', UpdateProfileAction::class);
     Route::get('user-activities', ActivityUserListAction::class);
 
+    Route::prefix('sections')->name('admin.section.')->group(function () {
+        Route::get('/', GetSectionListAction::class);        // List all plans
+        Route::get('/create', GetSectionAction::class)->name('create'); // Create form
+        Route::get('/{id}', GetSectionAction::class)->name('show');     // Show details
+        Route::get('/{id}/edit', GetSectionAction::class)->name('edit'); // Edit form
+        Route::post('/', StoreSectionAction::class)->name('store');     // Store plan
+        Route::put('/{id}', UpdateSectionAction::class)->name('update'); // Update plan
+        Route::delete('/{id}', DeleteSectionAction::class)->name('destroy'); // Delete plan
+    });
     Route::prefix('workspaces')->name('admin.workspace.')->group(function () {
         // List all workspaces
         Route::get('/', GetWorkspaceListAction::class)->name('index');
@@ -108,8 +122,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{workspace}/assign-questions', [WorkspaceQuestionController::class, 'showAssignForm'])
             ->name('assign-questions.form');
 
-        Route::post('/{workspace}/assign-questions', AssignQuestionsToWorkspaceAction::class)
-        ;
+        Route::post('/{workspace}/assign-questions', AssignQuestionsToWorkspaceAction::class);
 
         Route::put('/{workspace}/questions/{question}', [WorkspaceQuestionController::class, 'updateQuestionSettings'])
             ->name('questions.update-settings');

@@ -19,7 +19,7 @@ class Questionnaire extends Model
     protected $fillable = [
         'user_id',
         'title',
-        'section',
+        'section_id',
         'description',
         'start_date',
         'end_date',
@@ -56,6 +56,10 @@ class Questionnaire extends Model
     {
         return $this->hasMany(Question::class);
     }
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id', 'id');
+    }
 
     /**
      * Scope a query to only include questionnaires from a specific section.
@@ -64,6 +68,4 @@ class Questionnaire extends Model
     {
         return $query->where('section', $section);
     }
-
-
 }

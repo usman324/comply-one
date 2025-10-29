@@ -12,6 +12,7 @@ use App\Models\PaymentStatus;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Models\Rack;
+use App\Models\Section;
 use App\Models\Size;
 use App\Models\Supplier;
 use App\Models\Unit;
@@ -111,38 +112,11 @@ function gs()
     $gs = GeneralSetting::first();
     return $gs;
 }
-function categories()
+function sections()
 {
-    $gs = Category::all();
+    $gs = Section::all();
     return $gs;
 }
-function warehouses()
-{
-    $gs = Warehouse::all();
-    return $gs;
-}
-function rooms()
-{
-    $gs = InventoryRoom::all();
-    return $gs;
-}
-function racks()
-{
-    $gs = Rack::all();
-    return $gs;
-}
-
-function paymentStatus()
-{
-    $gs = PaymentStatus::all();
-    return $gs;
-}
-function paymentMethod()
-{
-    $gs = PaymentMethod::all();
-    return $gs;
-}
-
 function formatLocation($carton)
 {
     $parts = [];
@@ -192,32 +166,6 @@ function generateCartonId()
     $nextNumber = $lastCarton ? (int)substr($lastCarton->carton_id, 2) + 1 : 1;
     return 'C-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 }
-function units()
-{
-    $gs = Unit::all();
-    return $gs;
-}
-function sizes()
-{
-    $gs = Size::all();
-    return $gs;
-}
-function colors()
-{
-    $gs = Color::all();
-    return $gs;
-}
-
-function brands()
-{
-    $gs = Brand::all();
-    return $gs;
-}
-function suppliers()
-{
-    $gs = Supplier::all();
-    return $gs;
-}
 function customers()
 {
     $gs = Customer::all();
@@ -258,15 +206,6 @@ function timeDuration($start, $end)
     $minutes = $totalDuration % 60;
 
     return $hours > 0 ? "{$hours}h {$minutes}m" : "{$minutes}m";
-}
-function generateUniqueBarcode()
-{
-    do {
-        // Generate random 13-digit number
-        $barcode = str_pad(mt_rand(1, 9999999999999), 13, '0', STR_PAD_LEFT);
-    } while (ProductVariation::where('barcode', $barcode)->exists());
-
-    return $barcode;
 }
 function saveImage($path, $image)
 {
