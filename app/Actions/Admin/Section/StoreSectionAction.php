@@ -12,9 +12,11 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class StoreSectionAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
-   protected string $title = 'Section';
+    protected string $title = 'Section';
     protected string $view = 'admin.section';
     protected string $url = 'sections';
     protected string $permission = 'section';

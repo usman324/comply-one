@@ -1,20 +1,11 @@
 <?php
 
-use App\Models\Brand;
 use App\Models\Carton;
-use App\Models\Category;
-use App\Models\Color;
 use App\Models\Customer;
 use App\Models\GeneralSetting;
-use App\Models\InventoryRoom;
-use App\Models\PaymentMethod;
-use App\Models\PaymentStatus;
 use App\Models\Product;
 use App\Models\ProductVariation;
-use App\Models\Rack;
 use App\Models\Section;
-use App\Models\Size;
-use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\UserActivity;
 use App\Models\Warehouse;

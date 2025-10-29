@@ -41,7 +41,7 @@ class GetQuestionnaireAction extends BaseAction
 
             // Calculate statistics based on question type
             if ($question->type === 'rating' || $question->type === 'scale') {
-                $values = $answers->pluck('answer')->filter()->map(fn($v) => (float)$v);
+                $values = $answers->pluck('answer')->filter()->map(fn ($v) => (float)$v);
                 $analytics[$question->id]['average'] = $values->avg();
                 $analytics[$question->id]['min'] = $values->min();
                 $analytics[$question->id]['max'] = $values->max();
@@ -50,7 +50,7 @@ class GetQuestionnaireAction extends BaseAction
             if (in_array($question->type, ['radio', 'checkbox', 'select'])) {
                 $analytics[$question->id]['distribution'] = $answers
                     ->groupBy('answer')
-                    ->map(fn($group) => $group->count())
+                    ->map(fn ($group) => $group->count())
                     ->toArray();
             }
         }

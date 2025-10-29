@@ -4,10 +4,8 @@ namespace App\Actions\Admin\Questionnaire;
 
 use App\Actions\BaseAction;
 use App\Models\Questionnaire;
-use App\Models\Sale;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
 class GetQuestionnaireListAction extends BaseAction

@@ -30,10 +30,7 @@ use App\Actions\Admin\Section\UpdateSectionAction;
 use App\Actions\Admin\User\ActivityUserListAction;
 use App\Actions\Admin\User\UpdateUserAction;
 use App\Actions\Admin\Workspace\DeleteWorkspaceAction;
-use App\Actions\Admin\Workspace\DraftWorkspaceAction;
 use App\Actions\Admin\Workspace\GetWorkspaceAction;
-use App\Actions\Admin\Workspace\GetWorkspaceListAction;
-use App\Actions\Admin\Workspace\LoadDraftWorkspaceAction;
 use App\Actions\Admin\Workspace\StoreWorkspaceAction;
 use App\Actions\Admin\Workspace\UpdateWorkspaceAction;
 use App\Actions\Auth\LogoutAction;
@@ -46,7 +43,6 @@ use App\Actions\Admin\Workspace\BulkAssignQuestionsAction;
 use App\Actions\Admin\Workspace\CopyQuestionsToWorkspaceAction;
 use App\Actions\Admin\Workspace\GetWorkspaceQuestionsAction;
 use App\Actions\Admin\Workspace\GetAvailableQuestionsAction;
-use App\Http\Controllers\QuestionnaireController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,32 +77,31 @@ Route::middleware('auth')->group(function () {
     Route::get('user-activities', ActivityUserListAction::class);
 
     Route::prefix('sections')->name('admin.section.')->group(function () {
-        Route::get('/', GetSectionListAction::class);        // List all plans
-        Route::get('/create', GetSectionAction::class)->name('create'); // Create form
-        Route::get('/{id}', GetSectionAction::class)->name('show');     // Show details
-        Route::get('/{id}/edit', GetSectionAction::class)->name('edit'); // Edit form
-        Route::post('/', StoreSectionAction::class)->name('store');     // Store plan
-        Route::put('/{id}', UpdateSectionAction::class)->name('update'); // Update plan
-        Route::delete('/{id}', DeleteSectionAction::class)->name('destroy'); // Delete plan
+        Route::get('/', GetSectionListAction::class);
+        Route::get('/create', GetSectionAction::class)->name('create');
+        Route::get('/{id}', GetSectionAction::class)->name('show');
+        Route::get('/{id}/edit', GetSectionAction::class)->name('edit');
+        Route::post('/', StoreSectionAction::class)->name('store');
+        Route::put('/{id}', UpdateSectionAction::class)->name('update');
+        Route::delete('/{id}', DeleteSectionAction::class)->name('destroy');
     });
     Route::prefix('questionnaires')->name('admin.questionnaire.')->group(function () {
-        Route::get('/', GetQuestionnaireListAction::class);        // List all plans
-        Route::get('/create', GetQuestionnaireAction::class)->name('create'); // Create form
-        Route::get('/{id}', GetQuestionnaireAction::class)->name('show');     // Show details
-        Route::get('/{id}/edit', GetQuestionnaireAction::class)->name('edit'); // Edit form
-        Route::post('/', StoreQuestionnaireAction::class)->name('store');     // Store plan
-        Route::put('/{id}', UpdateQuestionnaireAction::class)->name('update'); // Update plan
-        Route::delete('/{id}', DeleteQuestionnaireAction::class)->name('destroy'); // Delete plan
+        Route::get('/', GetQuestionnaireListAction::class);
+        Route::get('/create', GetQuestionnaireAction::class)->name('create');
+        Route::get('/{id}', GetQuestionnaireAction::class)->name('show');
+        Route::get('/{id}/edit', GetQuestionnaireAction::class)->name('edit');
+        Route::post('/', StoreQuestionnaireAction::class)->name('store');
+        Route::put('/{id}', UpdateQuestionnaireAction::class)->name('update');
+        Route::delete('/{id}', DeleteQuestionnaireAction::class)->name('destroy');
     });
     Route::prefix('workspaces')->name('admin.workspace.')->group(function () {
-        // List all workspaces
-        Route::get('/', GetQuestionnaireListAction::class);        // List all workspaces
-        Route::get('/create', GetQuestionnaireAction::class)->name('create'); // Create form
-        Route::get('/{id}', GetWorkspaceAction::class)->name('show');     // Show details
-        Route::get('/{id}/edit', GetWorkspaceAction::class)->name('edit'); // Edit form
-        Route::post('/', StoreWorkspaceAction::class)->name('store');     // Store workspaces
-        Route::put('/{id}', UpdateWorkspaceAction::class)->name('update'); // Update workspaces
-        Route::delete('/{id}', DeleteWorkspaceAction::class)->name('destroy'); // Delete workspaces
+        Route::get('/', GetQuestionnaireListAction::class);
+        Route::get('/create', GetQuestionnaireAction::class)->name('create');
+        Route::get('/{id}', GetWorkspaceAction::class)->name('show');
+        Route::get('/{id}/edit', GetWorkspaceAction::class)->name('edit');
+        Route::post('/', StoreWorkspaceAction::class)->name('store');
+        Route::put('/{id}', UpdateWorkspaceAction::class)->name('update');
+        Route::delete('/{id}', DeleteWorkspaceAction::class)->name('destroy');
         Route::post('/{workspace}/assign-questions', AssignQuestionsToWorkspaceAction::class);
 
         Route::put('/{workspace}/questions/{question}', UpdateQuestionSettingsAction::class)
@@ -137,32 +132,31 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('users')->name('admin.user.')->group(function () {
-        Route::get('/', GetUserListAction::class);        // List all plans
-        Route::get('/create', GetUserAction::class)->name('create'); // Create form
-        Route::get('/{id}', GetUserAction::class)->name('show');     // Show details
-        Route::get('/{id}/edit', GetUserAction::class)->name('edit'); // Edit form
-        Route::post('/', StoreUserAction::class)->name('store');     // Store plan
-        Route::put('/{id}', UpdateUserAction::class)->name('update'); // Update plan
-        Route::delete('/{id}', DeleteUserAction::class)->name('destroy'); // Delete plan
+        Route::get('/', GetUserListAction::class);
+        Route::get('/create', GetUserAction::class)->name('create');
+        Route::get('/{id}', GetUserAction::class)->name('show');
+        Route::get('/{id}/edit', GetUserAction::class)->name('edit');
+        Route::post('/', StoreUserAction::class)->name('store');
+        Route::put('/{id}', UpdateUserAction::class)->name('update');
+        Route::delete('/{id}', DeleteUserAction::class)->name('destroy');
     });
 
     Route::prefix('roles')->name('admin.role.')->group(function () {
-        Route::get('/', GetRoleListAction::class);        // List all plans
-        Route::get('/create', GetRoleAction::class)->name('create'); // Create form
-        Route::get('/{id}', GetRoleAction::class)->name('show');     // Show details
-        Route::get('/{id}/edit', GetRoleAction::class)->name('edit'); // Edit form
-        Route::post('/', StoreRoleAction::class)->name('store');     // Store plan
-        Route::put('/{id}', UpdateRoleAction::class)->name('update'); // Update plan
-        Route::delete('/{id}', DeleteRoleAction::class)->name('destroy'); // Delete plan
+        Route::get('/', GetRoleListAction::class);
+        Route::get('/create', GetRoleAction::class)->name('create');
+        Route::get('/{id}', GetRoleAction::class)->name('show');
+        Route::get('/{id}/edit', GetRoleAction::class)->name('edit');
+        Route::post('/', StoreRoleAction::class)->name('store');
+        Route::put('/{id}', UpdateRoleAction::class)->name('update');
+        Route::delete('/{id}', DeleteRoleAction::class)->name('destroy');
     });
 
 
     Route::prefix('general-settings')->name('admin.general-setting.')->group(function () {
-        Route::get('/', GetGenerelSettingAction::class);        // List all plans
-        Route::put('/{id}', UpdateGenerelSettingAction::class)->name('update'); // Update plan
+        Route::get('/', GetGenerelSettingAction::class);
+        Route::put('/{id}', UpdateGenerelSettingAction::class)->name('update');
     });
 
-    // Admin routes for managing questionnaires (requires authentication)
 
 });
 
@@ -177,9 +171,3 @@ Route::get('storage', function () {
     \Artisan::call('storage:link');
     return back();
 });
-
-
-
-// Auth::routes();
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

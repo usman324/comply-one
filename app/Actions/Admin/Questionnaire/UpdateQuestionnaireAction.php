@@ -8,7 +8,6 @@ use App\Models\Questionnaire;
 use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
-use Exception;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
 

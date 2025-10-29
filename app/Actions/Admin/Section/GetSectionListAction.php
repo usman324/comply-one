@@ -3,7 +3,6 @@
 namespace App\Actions\Admin\Section;
 
 use App\Actions\BaseAction;
-use App\Models\Plan;
 use App\Models\Section;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;

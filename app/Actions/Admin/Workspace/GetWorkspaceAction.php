@@ -10,7 +10,6 @@ use App\Models\QuestionnaireResponse;
 use App\Models\Section;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 
 class GetWorkspaceAction extends BaseAction
 {

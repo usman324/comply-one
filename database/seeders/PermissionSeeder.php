@@ -65,7 +65,7 @@ class PermissionSeeder extends Seeder
                 'category' => 'questionnaires',
                 'display_name' => 'Edit questionnaire',
             ],
-            
+
             [
                 'name' => 'delete_questionnaire',
                 'guard_name' => 'web',
@@ -135,7 +135,7 @@ class PermissionSeeder extends Seeder
                 'display_name' => 'Delete Policy',
             ],
 
-          
+
 
             // Reports
             [
@@ -157,7 +157,7 @@ class PermissionSeeder extends Seeder
                 'display_name' => 'Export Report',
             ],
 
-          
+
 
             // Workspaces
             [

@@ -59,7 +59,7 @@ class RoleSeeder extends Seeder
                 'delete_user',
                 'assign_role',
 
-               
+
 
                 // Questionnaire - Full Access
                 'view_questionnaire',
@@ -81,14 +81,14 @@ class RoleSeeder extends Seeder
                 'approve_policy',
                 'delete_policy',
 
-              
+
 
                 // Reports - Full Access
                 'view_report',
                 'add_report',
                 'export_report',
 
-             
+
                 // Workspace & Role Management
                 'list_workspace',
                 'add_workspace',
@@ -124,13 +124,13 @@ class RoleSeeder extends Seeder
                 'edit_policy',
                 'approve_policy',
 
-               
+
                 // Reports - Full Access
                 'view_report',
                 'add_report',
                 'export_report',
 
-              
+
             ],
 
             'compliance analyst' => [
@@ -148,7 +148,7 @@ class RoleSeeder extends Seeder
                 // Policies - View only
                 'view_policy',
 
-              
+
                 // Reports - View only
                 'view_report',
             ],

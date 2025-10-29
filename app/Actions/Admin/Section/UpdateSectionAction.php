@@ -8,12 +8,13 @@ use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
 use Exception;
-use Illuminate\Validation\ValidationException;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class UpdateSectionAction extends BaseAction
 {
-    use AsAction, RespondsWithJson, CustomAction;
+    use AsAction;
+    use RespondsWithJson;
+    use CustomAction;
 
     protected string $title = 'Section';
     protected string $view = 'admin.section';
