@@ -3,6 +3,7 @@
 namespace App\Actions\Admin\Workspace;
 
 use App\Actions\BaseAction;
+use App\Models\Question;
 use App\Models\Questionnaire;
 use App\Models\Workspace;
 use App\Models\QuestionnaireResponse;
@@ -30,13 +31,19 @@ class GetWorkspaceAction extends BaseAction
     {
         $routeName = $request->route()->getName();
         $record = $this->handle($id);
-        $roles = Role::where('is_hidden', false)->get();
+        if ($request->assign) {
+            // Get all available questions
+            $availableQuestions = Question::with(['questionnaire', 'workspaces'])
+                ->ordered()
+                ->get();
 
+            // Get all questionnaires for filtering
+            $questionnaires = Questionnaire::orderBy('title')->get();
+            return view($this->view . '.assign-question', get_defined_vars());
+        }
         // Get all active questionnaires grouped by section
         $questionnaires = Questionnaire::where('status', 'active')
-            // ->where('start_date', '<=', now())
-            // ->where('end_date', '>=', now())
-            ->with(['questions','section'])
+            ->with(['questions', 'section'])
             ->orderBy('section_id')
             ->get();
         // Group questionnaires by section and process questions

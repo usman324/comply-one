@@ -18,8 +18,7 @@ return new class () extends Migration {
             $table->string('question_id')->nullable()->unique();
             $table->string('title');
             $table->string('status');
-            $table->date('start_date');
-            $table->date('end_date');
+           
             $table->text('description')->nullable();
             $table->text('message')->nullable();
             $table->enum('type', ['select', 'textarea', 'text', 'checkbox', 'radio'])->default('select');

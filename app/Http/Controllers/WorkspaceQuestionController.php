@@ -17,27 +17,6 @@ class WorkspaceQuestionController extends Controller
         $this->assignAction = $assignAction;
     }
 
-    /**
-     * Show form to assign questions to workspace
-     */
-    public function showAssignForm(Workspace $workspace)
-    {
-        $workspace->load(['questions']);
-
-        // Get all available questions
-        $availableQuestions = Question::with(['questionnaire', 'workspaces'])
-            ->ordered()
-            ->get();
-
-        // Get all questionnaires for filtering
-        $questionnaires = Questionnaire::orderBy('title')->get();
-
-        return view('admin.workspace.assign-questions', [
-            'workspace' => $workspace,
-            'availableQuestions' => $availableQuestions,
-            'questionnaires' => $questionnaires,
-        ]);
-    }
 
     /**
      * Update question settings for workspace

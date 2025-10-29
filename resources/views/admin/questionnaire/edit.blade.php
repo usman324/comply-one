@@ -37,39 +37,30 @@
                             <!-- Basic Information -->
                             <div class="card mb-3">
                                 <div class="card-header bg-soft-primary">
-                                    <h6 class="mb-0">Basic Information</h6>
+                                    <h6 class="mb-0 float-start">Basic Information</h6>
+                                    <a href="{{ route($url . '.index') }}" class="btn btn-sm float-end btn-outline-danger">
+                                        <i class="ri-close-line me-1"></i> Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-sm float-end me-2 btn-primary">
+                                        <i class="ri-save-line me-1"></i> Update Questionnaire
+                                    </button>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-3 mb-3">
-                                            <label class="form-label">Section <span class="text-danger">*</span> <a href="javascript:"
-                                            onclick="getAddRecord('{{ url('sections/create?select_id=section_id') }}','#addModel')"
-                                            class="me-2"><i style="font-size: medium;"
-                                                class="ri-add-circle-line me-2"></i>
-                                        </a></label>
-                                            <select class="form-control form-control-sm select2" id="section_id" name="section_id" required>
+                                            <label class="form-label">Section <span class="text-danger">*</span> <a
+                                                    href="javascript:"
+                                                    onclick="getAddRecord('{{ url('sections/create?select_id=section_id') }}','#addModel')"
+                                                    class="me-2"><i style="font-size: medium;"
+                                                        class="ri-add-circle-line me-2"></i>
+                                                </a></label>
+                                            <select class="form-control form-control-sm select2" id="section_id"
+                                                name="section_id" required>
                                                 <option value="">Select Section</option>
                                                 @foreach (sections() as $section)
                                                     <option value="{{ $section->id }}" @selected($record->section_id == $section->id)>
                                                         {{ str_replace('_', ' ', $section->name) }}</option>
                                                 @endforeach
-                                                {{-- <option value="customer_feedback"
-                                                    {{ $record->section == 'customer_feedback' ? 'selected' : '' }}>Customer
-                                                    Feedback</option>
-                                                <option value="employee_survey"
-                                                    {{ $record->section == 'employee_survey' ? 'selected' : '' }}>Employee
-                                                    Survey</option>
-                                                <option value="market_research"
-                                                    {{ $record->section == 'market_research' ? 'selected' : '' }}>Market
-                                                    Research</option>
-                                                <option value="event_feedback"
-                                                    {{ $record->section == 'event_feedback' ? 'selected' : '' }}>Event
-                                                    Feedback</option>
-                                                <option value="product_feedback"
-                                                    {{ $record->section == 'product_feedback' ? 'selected' : '' }}>Product
-                                                    Feedback</option>
-                                                <option value="other" {{ $record->section == 'other' ? 'selected' : '' }}>
-                                                    Other</option> --}}
                                             </select>
                                         </div>
                                         <div class="col-md-3 mb-3">
@@ -77,17 +68,6 @@
                                             <input type="text" class="form-control form-control-sm" name="title"
                                                 placeholder="e.g., Customer Satisfaction Survey"
                                                 value="{{ $record->title }}" required />
-                                        </div>
-
-                                        <div class="col-md-3 mb-3">
-                                            <label class="form-label">Start Date</label>
-                                            <input type="date" class="form-control form-control-sm" name="start_date"
-                                                value="{{ $record->start_date ? $record->start_date->format('Y-m-d') : '' }}" />
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <label class="form-label">End Date</label>
-                                            <input type="date" class="form-control form-control-sm" name="end_date"
-                                                value="{{ $record->end_date ? $record->end_date->format('Y-m-d') : '' }}" />
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <label class="form-label">Description</label>
@@ -180,14 +160,7 @@
                             </div>
 
                             <hr>
-                            <div class="d-flex justify-content-end gap-2">
-                                <a href="{{ route($url . '.index') }}" class="btn btn-outline-secondary">
-                                    <i class="ri-close-line me-1"></i> Cancel
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="ri-save-line me-1"></i> Update Questionnaire
-                                </button>
-                            </div>
+
                         </form>
                     </div>
                 </div>
@@ -267,7 +240,7 @@
             </div>
         </div>
     </template>
-      <div id="addRecord">
+    <div id="addRecord">
 
     </div>
 @endsection

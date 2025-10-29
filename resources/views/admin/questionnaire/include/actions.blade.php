@@ -5,7 +5,7 @@
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
         @can('view_' . $permission)
-            <li><a class="dropdown-item edit-item-btn" href="{{ $url . '/' . $record->id . '/results' }}"><i
+            <li><a class="dropdown-item edit-item-btn" href="{{ $url . '/' . $record->id }}"><i
                         class="ri-eye-fill align-bottom me-2 text-muted"></i>
                     View</a>
             </li>

@@ -59,8 +59,8 @@ class StoreWorkspaceAction extends BaseAction
                 'status' => $request->status ?? 'active',
                 'avatar' => $avatar_name,
                 'workspace_number' => Workspace::generateWorkspaceNumber(),
-                'owner_id' => auth()->id(),
-                'created_by' => auth()->id(),
+                'owner_id' => getUser()->id,
+                'created_by' => getUser()->id,
             ]);
 
             // Save questionnaire responses if provided
@@ -78,7 +78,7 @@ class StoreWorkspaceAction extends BaseAction
                             $questionnaire = $question->questionnaire;
                             QuestionnaireResponse::create([
                                 'workspace_id' => $workspace->id,
-                                'user_id' => auth()->id(),
+                                'user_id' => getUser()->id,
                                 'section' => $questionnaire->section,
                                 'questionnaire_id' => $questionnaire->id,
                                 'question_id' => $question_id,

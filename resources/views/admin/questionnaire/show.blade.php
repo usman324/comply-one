@@ -8,8 +8,8 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h4 class="mb-1">{{ $questionnaire->title }}</h4>
-                                <p class="text-muted mb-0">{{ $questionnaire->description }}</p>
+                                <h4 class="mb-1">{{ $record->title }}</h4>
+                                <p class="text-muted mb-0">{{ $record->description }}</p>
                             </div>
                             <a href="{{ url('questionnaires') }}" class="btn btn-outline-secondary">
                                 <i class="ri-arrow-left-line me-1"></i> Back to List
@@ -33,7 +33,7 @@
                         <div class="d-flex align-items-end justify-content-between mt-3">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                                    {{ $questionnaire->responses->count() }}
+                                    {{ $record->responses->count() }}
                                 </h4>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -57,7 +57,7 @@
                         <div class="d-flex align-items-end justify-content-between mt-3">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                                    {{ $questionnaire->questions->count() }}
+                                    {{ $record->questions->count() }}
                                 </h4>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -81,7 +81,7 @@
                         <div class="d-flex align-items-end justify-content-between mt-3">
                             <div>
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                                    {{ round($questionnaire->responses->avg('time_spent') / 60, 1) }} min
+                                    {{ round($record->responses->avg('time_spent') / 60, 1) }} min
                                 </h4>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -104,9 +104,9 @@
                         </div>
                         <div class="d-flex align-items-end justify-content-between mt-3">
                             <div>
-                                {{-- @dd($questionnaire) --}}
+                                {{-- @dd($record) --}}
                                 <h4 class="fs-22 fw-semibold ff-secondary mb-0">
-                                    {{-- {{ count($questionnaire->responses) > 0 ? round(($questionnaire->completedResponses->count() / $questionnaire->responses->count()) * 100) : 0 }}% --}}
+                                    {{-- {{ count($record->responses) > 0 ? round(($record->completedResponses->count() / $record->responses->count()) * 100) : 0 }}% --}}
                                 </h4>
                             </div>
                             <div class="avatar-sm flex-shrink-0">
@@ -213,21 +213,6 @@
         </div>
 
         <!-- Export Options -->
-        <div class="row mb-4">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h6 class="mb-3">Export Results</h6>
-                        <button class="btn btn-success me-2" onclick="exportToExcel()">
-                            <i class="ri-file-excel-line me-1"></i> Export to Excel
-                        </button>
-                        <button class="btn btn-danger" onclick="exportToPDF()">
-                            <i class="ri-file-pdf-line me-1"></i> Export to PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 @endsection
 
@@ -316,11 +301,11 @@
         });
 
         function exportToExcel() {
-            window.location.href = '{{ url("questionnaires/{$questionnaire->id}/export/excel") }}';
+            window.location.href = '{{ url("questionnaires/{$record->id}/export/excel") }}';
         }
 
         function exportToPDF() {
-            window.location.href = '{{ url("questionnaires/{$questionnaire->id}/export/pdf") }}';
+            window.location.href = '{{ url("questionnaires/{$record->id}/export/pdf") }}';
         }
     </script>
 

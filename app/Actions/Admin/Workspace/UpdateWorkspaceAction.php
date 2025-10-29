@@ -65,7 +65,7 @@ class UpdateWorkspaceAction extends BaseAction
                 'type' => $request->type ?? $workspace->type,
                 'status' => $request->status ?? $workspace->status,
                 'avatar' => $avatar_name,
-                'updated_by' => auth()->id(),
+                'updated_by' => getUser()->id,
             ]);
 
             // Update questionnaire responses if provided
@@ -84,7 +84,7 @@ class UpdateWorkspaceAction extends BaseAction
                             QuestionnaireResponse::updateOrCreate(
                                 [
                                     'workspace_id' => $workspace->id,
-                                    'user_id' => auth()->id(),
+                                    'user_id' => getUser()->id,
                                     'question_id' => $question_id,
                                 ],
                                 [

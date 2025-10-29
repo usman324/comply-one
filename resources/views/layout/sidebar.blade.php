@@ -106,6 +106,13 @@
                                     </a>
                                 </li>
                             @endcan
+                              @can('add_section')
+                                <li class="nav-item">
+                                    <a href="{{ url('sections') }}" class="nav-link" data-key="t-questionnaires-create">
+                                        <i class="ri-list-check"></i> Sections
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </div>
                 </li>

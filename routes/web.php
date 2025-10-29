@@ -1,11 +1,5 @@
 <?php
 
-
-use App\Actions\Admin\Customer\DeleteCustomerAction;
-use App\Actions\Admin\Customer\GetCustomerAction;
-use App\Actions\Admin\Customer\GetCustomerListAction;
-use App\Actions\Admin\Customer\StoreCustomerAction;
-use App\Actions\Admin\Customer\UpdateCustomerAction;
 use App\Actions\Auth\GetLoginAction;
 use App\Actions\Auth\LoginAction;
 use App\Actions\Admin\Dashboard\DashboardAction;
@@ -14,6 +8,11 @@ use App\Actions\Admin\GenerelSetting\GetGenerelSettingAction;
 use App\Actions\Admin\GenerelSetting\UpdateGenerelSettingAction;
 use App\Actions\Admin\Profile\GetProfileAction;
 use App\Actions\Admin\Profile\UpdateProfileAction;
+use App\Actions\Admin\Questionnaire\DeleteQuestionnaireAction;
+use App\Actions\Admin\Questionnaire\GetQuestionnaireAction;
+use App\Actions\Admin\Questionnaire\GetQuestionnaireListAction;
+use App\Actions\Admin\Questionnaire\StoreQuestionnaireAction;
+use App\Actions\Admin\Questionnaire\UpdateQuestionnaireAction;
 use App\Actions\Admin\Role\DeleteRoleAction;
 use App\Actions\Admin\User\DeleteUserAction;
 use App\Actions\Admin\Role\GetRoleAction;
@@ -83,45 +82,24 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', UpdateSectionAction::class)->name('update'); // Update plan
         Route::delete('/{id}', DeleteSectionAction::class)->name('destroy'); // Delete plan
     });
+    Route::prefix('questionnaires')->name('admin.questionnaire.')->group(function () {
+        Route::get('/', GetQuestionnaireListAction::class);        // List all plans
+        Route::get('/create', GetQuestionnaireAction::class)->name('create'); // Create form
+        Route::get('/{id}', GetQuestionnaireAction::class)->name('show');     // Show details
+        Route::get('/{id}/edit', GetQuestionnaireAction::class)->name('edit'); // Edit form
+        Route::post('/', StoreQuestionnaireAction::class)->name('store');     // Store plan
+        Route::put('/{id}', UpdateQuestionnaireAction::class)->name('update'); // Update plan
+        Route::delete('/{id}', DeleteQuestionnaireAction::class)->name('destroy'); // Delete plan
+    });
     Route::prefix('workspaces')->name('admin.workspace.')->group(function () {
         // List all workspaces
-        Route::get('/', GetWorkspaceListAction::class)->name('index');
-
-        // Create form
-        Route::get('/create', GetWorkspaceAction::class)->name('create');
-
-        // Store workspace with questionnaire (used by the wizard form)
-        Route::post('/create-with-questionnaire', StoreWorkspaceAction::class)->name('store-with-questionnaire');
-
-        // Regular store (if you still want to keep it)
-        Route::post('/', StoreWorkspaceAction::class)->name('store');
-
-        // Auto-save draft
-        Route::post('/auto-save', DraftWorkspaceAction::class)->name('auto-save');
-
-        // Load draft
-        Route::get('/load-draft', LoadDraftWorkspaceAction::class)->name('load-draft');
-
-        // Workspace specific routes
-        Route::prefix('/{id}')->group(function () {
-            // Show details
-            Route::get('', GetWorkspaceAction::class)->name('show');
-
-            // Edit form
-            Route::get('/edit', GetWorkspaceAction::class)->name('edit');
-
-            // Update workspace
-            Route::put('', UpdateWorkspaceAction::class)->name('update');
-
-            // Update with questionnaire (for wizard-style edit)
-            Route::put('/update-with-questionnaire', UpdateWorkspaceAction::class)->name('update-with-questionnaire');
-
-            // Delete workspace
-            Route::delete('', DeleteWorkspaceAction::class)->name('destroy');
-        });
-        Route::get('/{workspace}/assign-questions', [WorkspaceQuestionController::class, 'showAssignForm'])
-            ->name('assign-questions.form');
-
+        Route::get('/', GetQuestionnaireListAction::class);        // List all workspaces
+        Route::get('/create', GetQuestionnaireAction::class)->name('create'); // Create form
+        Route::get('/{id}', GetWorkspaceAction::class)->name('show');     // Show details
+        Route::get('/{id}/edit', GetWorkspaceAction::class)->name('edit'); // Edit form
+        Route::post('/', StoreWorkspaceAction::class)->name('store');     // Store workspaces
+        Route::put('/{id}', UpdateWorkspaceAction::class)->name('update'); // Update workspaces
+        Route::delete('/{id}', DeleteWorkspaceAction::class)->name('destroy'); // Delete workspaces
         Route::post('/{workspace}/assign-questions', AssignQuestionsToWorkspaceAction::class);
 
         Route::put('/{workspace}/questions/{question}', [WorkspaceQuestionController::class, 'updateQuestionSettings'])
@@ -164,15 +142,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', DeleteRoleAction::class)->name('destroy'); // Delete plan
     });
 
-    Route::prefix('customers')->name('admin.customer.')->group(function () {
-        Route::get('/', GetCustomerListAction::class);        // List all plans
-        Route::get('/create', GetCustomerAction::class)->name('create'); // Create form
-        Route::get('/{id}', GetCustomerAction::class)->name('show');     // Show details
-        Route::get('/{id}/edit', GetCustomerAction::class)->name('edit'); // Edit form
-        Route::post('/', StoreCustomerAction::class)->name('store');     // Store plan
-        Route::put('/{id}', UpdateCustomerAction::class)->name('update'); // Update plan
-        Route::delete('/{id}', DeleteCustomerAction::class)->name('destroy'); // Delete plan
-    });
 
     Route::prefix('general-settings')->name('admin.general-setting.')->group(function () {
         Route::get('/', GetGenerelSettingAction::class);        // List all plans
@@ -180,38 +149,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Admin routes for managing questionnaires (requires authentication)
-    Route::prefix('questionnaires')->group(function () {
-        // List all questionnaires
-        Route::get('/', [QuestionnaireController::class, 'index'])->name('questionnaires.index');
 
-        // Create new questionnaire
-        Route::get('/create', [QuestionnaireController::class, 'create'])->name('questionnaires.create');
-        Route::post('/', [QuestionnaireController::class, 'store'])->name('questionnaires.store');
-
-        // Edit questionnaire
-        Route::get('/{id}/edit', [QuestionnaireController::class, 'edit'])->name('questionnaires.edit');
-        Route::put('/{id}', [QuestionnaireController::class, 'update'])->name('questionnaires.update');
-
-        // Delete questionnaire
-        Route::delete('/{id}', [QuestionnaireController::class, 'destroy'])->name('questionnaires.destroy');
-
-        // View questionnaire results and analytics
-        Route::get('/{id}/results', [QuestionnaireController::class, 'results'])->name('questionnaires.results');
-    });
-
-    // Public routes for taking questionnaires (no authentication required)
-    Route::prefix('questionnaire')->group(function () {
-        // Take/view questionnaire
-        Route::get('/{id}/take', [QuestionnaireController::class, 'take'])->name('questionnaire.take');
-
-        // Submit questionnaire response
-        Route::post('/submit', [QuestionnaireController::class, 'submit'])->name('questionnaire.submit');
-
-        // Save draft (requires authentication)
-        Route::post('/save-draft', [QuestionnaireController::class, 'saveDraft'])
-            ->middleware('auth')
-            ->name('questionnaire.save-draft');
-    });
 });
 
 

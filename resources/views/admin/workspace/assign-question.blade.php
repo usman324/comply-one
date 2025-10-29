@@ -53,7 +53,7 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript:">Workspaces</a></li>
-                        <li class="breadcrumb-item"><a href="javascript:">{{ $workspace->name }}</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:">{{ $record->name }}</a></li>
                         <li class="breadcrumb-item active">Assign Questions</li>
                     </ol>
                 </div>
@@ -157,7 +157,7 @@
                 <div class="card-body">
                     <div class="alert alert-info">
                         <i class="ri-information-line me-2"></i>
-                        <strong>Workspace:</strong> {{ $workspace->name }}<br>
+                        <strong>Workspace:</strong> {{ $record->name }}<br>
                         <small>Drag to reorder, click settings to customize per question</small>
                     </div>
 
@@ -228,9 +228,9 @@
 
 <script>
 $(document).ready(function() {
-    const workspaceId = {{ $workspace->id }};
+    const workspaceId = {{ $record->id }};
     let selectedQuestions = [];
-    let currentlyAssignedQuestions = @json($workspace->questions->pluck('id')->toArray());
+    let currentlyAssignedQuestions = @json($record->questions->pluck('id')->toArray());
 
     // Initialize Sortable on selected questions list
     const sortable = new Sortable(document.getElementById('selectedQuestions'), {

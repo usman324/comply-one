@@ -7,10 +7,10 @@
                     <div class="card-header">
                         <h5 class="card-title mb-0 float-start">{{ $title }}s</h5>
                         @can('add_' . $permission)
-                        <button type="button" class="btn btn-primary  btn-sm  btn-primary float-end"
-                            onclick="getAddRecord('{{ $url . '/create' }}','#addModel')"><i
-                                class="ri-add-circle-line me-2"></i>Add
-                        </button>
+                            <button type="button" class="btn btn-primary  btn-sm  btn-primary float-end"
+                                onclick="getAddRecord('{{ $url . '/create' }}','#addModel')"><i
+                                    class="ri-add-circle-line me-2"></i>Add
+                            </button>
                         @endcan
                     </div>
                     <div class="card-body">
@@ -18,7 +18,7 @@
                             <table id="myTable" class="table table-bordered  nowrap table-striped">
                                 <thead>
                                     <tr>
-                                       <th style="width: 20px;"></th>
+                                        <th style="width: 20px;"></th>
                                         <th>Name</th>
                                     </tr>
                                 </thead>

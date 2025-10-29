@@ -54,8 +54,9 @@
 
                                 <!-- Middle Content Area - Form Steps -->
                                 <div class="col-lg-6">
-                                    <div class="px-lg-4">
-                                        <div class="tab-content">
+                                    <div class="px-lg-4" style="height:80vh; overflow:hidden;">
+                                        <div class="tab-content"
+                                            style="height:calc(80vh - 80px); overflow-y:auto;">
                                             <!-- Step 1: Workspace Information -->
                                             <div class="tab-pane fade show active" id="step-workspace" role="tabpanel"
                                                 aria-labelledby="step-workspace-tab">
@@ -68,8 +69,9 @@
                                                     <div class="col-md-12">
                                                         <label for="workspace_name" class="form-label">Workspace Name <span
                                                                 class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control form-control-sm" id="workspace_name"
-                                                            name="name" placeholder="Enter workspace name" required>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            id="workspace_name" name="name"
+                                                            placeholder="Enter workspace name" required>
                                                         <div class="invalid-feedback">Please enter workspace name</div>
                                                     </div>
 
@@ -83,7 +85,8 @@
                                                     <div class="col-md-6">
                                                         <label for="workspace_type" class="form-label">Workspace
                                                             Type</label>
-                                                        <select class="form-select" id="workspace_type" name="type">
+                                                        <select class="form-control form-control-sm select2"
+                                                            id="workspace_type" name="type">
                                                             <option value="">Select Type</option>
                                                             <option value="personal">Personal</option>
                                                             <option value="team">Team</option>
@@ -93,7 +96,8 @@
 
                                                     <div class="col-md-6">
                                                         <label for="workspace_status" class="form-label">Status</label>
-                                                        <select class="form-select" id="workspace_status" name="status">
+                                                        <select class="form-control form-control-sm select2"
+                                                            id="workspace_status" name="status">
                                                             <option value="active" selected>Active</option>
                                                             <option value="inactive">Inactive</option>
                                                         </select>
@@ -112,7 +116,7 @@
                                             </div>
                                             <!-- Dynamic Questionnaire Steps -->
                                             @foreach ($questionnaireSections as $sectionIndex => $section)
-                                              {{-- @dd($section['questions']) --}}
+                                                {{-- @dd($section['questions']) --}}
                                                 <div class="tab-pane fade" id="step-{{ $section['slug'] }}" role="tabpanel"
                                                     aria-labelledby="step-{{ $section['slug'] }}-tab">
                                                     <div>
@@ -139,15 +143,16 @@
                                                                 @endif
 
                                                                 @if ($question->type === 'text')
-                                                                    <input type="text" class="form-control form-control-sm"
+                                                                    <input type="text"
+                                                                        class="form-control form-control-sm"
                                                                         id="question-{{ $question->id }}"
                                                                         name="answers[{{ $question->id }}]"
                                                                         {{ $question->is_required ? 'required' : '' }}>
                                                                 @elseif($question->type === 'textarea')
-                                                                    <textarea class="form-control form-control-sm" id="question-{{ $question->id }}" name="answers[{{ $question->id }}]"
-                                                                        rows="4" {{ $question->is_required ? 'required' : '' }}></textarea>
+                                                                    <textarea class="form-control form-control-sm" id="question-{{ $question->id }}"
+                                                                        name="answers[{{ $question->id }}]" rows="4" {{ $question->is_required ? 'required' : '' }}></textarea>
                                                                 @elseif($question->type === 'select')
-                                                                    <select class="form-select"
+                                                                    <select class="form-control form-control-sm select2"
                                                                         id="question-{{ $question->id }}"
                                                                         name="answers[{{ $question->id }}]"
                                                                         {{ $question->is_required ? 'required' : '' }}>
@@ -161,36 +166,45 @@
                                                                     </select>
                                                                 @elseif($question->type === 'radio')
                                                                     @if ($question->options)
-                                                                        @foreach ($question->options as $optIndex => $option)
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                    type="radio"
-                                                                                    name="answers[{{ $question->id }}]"
-                                                                                    id="question-{{ $question->id }}-{{ $optIndex }}"
-                                                                                    value="{{ $option }}"
-                                                                                    {{ $question->is_required ? 'required' : '' }}>
-                                                                                <label class="form-check-label"
-                                                                                    for="question-{{ $question->id }}-{{ $optIndex }}">
-                                                                                    {{ $option }}
-                                                                                </label>
-                                                                            </div>
-                                                                        @endforeach
+                                                                        <div class="row">
+
+                                                                            @foreach ($question->options as $optIndex => $option)
+                                                                                <div class="col-md-4">
+                                                                                    <div class="form-check">
+                                                                                        <input class="form-check-input"
+                                                                                            type="radio"
+                                                                                            name="answers[{{ $question->id }}]"
+                                                                                            id="question-{{ $question->id }}-{{ $optIndex }}"
+                                                                                            value="{{ $option }}"
+                                                                                            {{ $question->is_required ? 'required' : '' }}>
+                                                                                        <label class="form-check-label"
+                                                                                            for="question-{{ $question->id }}-{{ $optIndex }}">
+                                                                                            {{ $option }}
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
                                                                     @endif
                                                                 @elseif($question->type === 'checkbox')
                                                                     @if ($question->options)
-                                                                        @foreach ($question->options as $optIndex => $option)
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                    type="checkbox"
-                                                                                    name="answers[{{ $question->id }}][]"
-                                                                                    id="question-{{ $question->id }}-{{ $optIndex }}"
-                                                                                    value="{{ $option }}">
-                                                                                <label class="form-check-label"
-                                                                                    for="question-{{ $question->id }}-{{ $optIndex }}">
-                                                                                    {{ $option }}
-                                                                                </label>
-                                                                            </div>
-                                                                        @endforeach
+                                                                        <div class="row">
+                                                                            @foreach ($question->options as $optIndex => $option)
+                                                                                <div class="col-md-4">
+                                                                                    <div class="form-check">
+                                                                                        <input class="form-check-input"
+                                                                                            type="checkbox"
+                                                                                            name="answers[{{ $question->id }}][]"
+                                                                                            id="question-{{ $question->id }}-{{ $optIndex }}"
+                                                                                            value="{{ $option }}">
+                                                                                        <label class="form-check-label"
+                                                                                            for="question-{{ $question->id }}-{{ $optIndex }}">
+                                                                                            {{ $option }}
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
                                                                     @endif
                                                                 @endif
 
@@ -565,7 +579,7 @@
                 const formData = new FormData(form);
 
                 // Send AJAX request
-                fetch('/workspaces/create-with-questionnaire', {
+                fetch('/workspaces', {
                         method: 'POST',
                         body: formData,
                         headers: {
@@ -646,24 +660,7 @@
                 }
             }
 
-            /**
-             * Auto-save functionality (optional)
-             */
-            function autoSave() {
-                const formData = new FormData(form);
 
-                fetch('/workspaces/auto-save', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                        }
-                    })
-                    .catch(error => console.error('Auto-save failed:', error));
-            }
-
-            // Optional: Auto-save every 30 seconds
-            // setInterval(autoSave, 30000);
 
         })();
     </script>

@@ -94,54 +94,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', DeleteRoleAction::class)->name('destroy'); // Delete plan
     });
 
-    Route::prefix('customers')->name('admin.customer.')->group(function () {
-        Route::get('/', GetCustomerListAction::class);        // List all plans
-        Route::get('/create', GetCustomerAction::class)->name('create'); // Create form
-        Route::get('/{id}', GetCustomerAction::class)->name('show');     // Show details
-        Route::get('/{id}/edit', GetCustomerAction::class)->name('edit'); // Edit form
-        Route::post('/', StoreCustomerAction::class)->name('store');     // Store plan
-        Route::put('/{id}', UpdateCustomerAction::class)->name('update'); // Update plan
-        Route::delete('/{id}', DeleteCustomerAction::class)->name('destroy'); // Delete plan
-    });
-
     Route::prefix('general-settings')->name('admin.general-setting.')->group(function () {
         Route::get('/', GetGenerelSettingAction::class);        // List all plans
         Route::put('/{id}', UpdateGenerelSettingAction::class)->name('update'); // Update plan
     });
 
     // Admin routes for managing questionnaires (requires authentication)
-    Route::prefix('questionnaires')->group(function () {
-        // List all questionnaires
-        Route::get('/', [QuestionnaireController::class, 'index'])->name('questionnaires.index');
-
-        // Create new questionnaire
-        Route::get('/create', [QuestionnaireController::class, 'create'])->name('questionnaires.create');
-        Route::post('/', [QuestionnaireController::class, 'store'])->name('questionnaires.store');
-
-        // Edit questionnaire
-        Route::get('/{id}/edit', [QuestionnaireController::class, 'edit'])->name('questionnaires.edit');
-        Route::put('/{id}', [QuestionnaireController::class, 'update'])->name('questionnaires.update');
-
-        // Delete questionnaire
-        Route::delete('/{id}', [QuestionnaireController::class, 'destroy'])->name('questionnaires.destroy');
-
-        // View questionnaire results and analytics
-        Route::get('/{id}/results', [QuestionnaireController::class, 'results'])->name('questionnaires.results');
-    });
-
-    // Public routes for taking questionnaires (no authentication required)
-    Route::prefix('questionnaire')->group(function () {
-        // Take/view questionnaire
-        Route::get('/{id}/take', [QuestionnaireController::class, 'take'])->name('questionnaire.take');
-
-        // Submit questionnaire response
-        Route::post('/submit', [QuestionnaireController::class, 'submit'])->name('questionnaire.submit');
-
-        // Save draft (requires authentication)
-        Route::post('/save-draft', [QuestionnaireController::class, 'saveDraft'])
-            ->middleware('auth')
-            ->name('questionnaire.save-draft');
-    });
+   
 });
 
 

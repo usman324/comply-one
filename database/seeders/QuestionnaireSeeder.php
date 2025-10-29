@@ -1356,8 +1356,6 @@ class QuestionnaireSeeder extends Seeder
                 'section_id' => $section->id,
                 // 'section' => $questionnaireData['section'],
                 'description' => $questionnaireData['description'],
-                'start_date' => now(),
-                'end_date' => now()->addMonths(3),
                 'allow_anonymous' => false,
                 'allow_multiple_responses' => false,
                 'show_progress' => true,

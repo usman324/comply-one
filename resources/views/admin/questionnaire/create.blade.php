@@ -32,7 +32,13 @@
                             <!-- Basic Information -->
                             <div class="card mb-3">
                                 <div class="card-header bg-soft-primary">
-                                    <h6 class="mb-0">Basic Information</h6>
+                                    <h6 class="mb-0 float-start">Basic Information</h6>
+                                     <button type="button" class="btn btn-sm float-end btn-outline-danger" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn btn-sm  me-2 float-end btn-primary">
+                                    <i class="ri-save-line me-1"></i> Create Questionnaire
+                                </button>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -62,15 +68,6 @@
                                             <label class="form-label">Title <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control form-control-sm" name="title"
                                                 placeholder="e.g., Customer Satisfaction Survey" required />
-                                        </div>
-
-                                        <div class="col-md-3 mb-3">
-                                            <label class="form-label">Start Date</label>
-                                            <input type="date" class="form-control form-control-sm" name="start_date" />
-                                        </div>
-                                        <div class="col-md-3 mb-3">
-                                            <label class="form-label">End Date</label>
-                                            <input type="date" class="form-control form-control-sm" name="end_date" />
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <label class="form-label">Description</label>
@@ -150,14 +147,7 @@
                             </div>
 
                             <hr>
-                            <div class="d-flex justify-content-end gap-2">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
-                                    Cancel
-                                </button>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="ri-save-line me-1"></i> Create Questionnaire
-                                </button>
-                            </div>
+                            
                         </form>
                     </div>
                 </div>
