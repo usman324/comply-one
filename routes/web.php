@@ -38,8 +38,15 @@ use App\Actions\Admin\Workspace\StoreWorkspaceAction;
 use App\Actions\Admin\Workspace\UpdateWorkspaceAction;
 use App\Actions\Auth\LogoutAction;
 use App\Actions\Admin\Workspace\AssignQuestionsToWorkspaceAction;
+use App\Actions\Admin\Workspace\UpdateQuestionSettingsAction;
+use App\Actions\Admin\Workspace\DetachQuestionFromWorkspaceAction;
+use App\Actions\Admin\Workspace\AttachQuestionToWorkspaceAction;
+use App\Actions\Admin\Workspace\ReorderWorkspaceQuestionsAction;
+use App\Actions\Admin\Workspace\BulkAssignQuestionsAction;
+use App\Actions\Admin\Workspace\CopyQuestionsToWorkspaceAction;
+use App\Actions\Admin\Workspace\GetWorkspaceQuestionsAction;
+use App\Actions\Admin\Workspace\GetAvailableQuestionsAction;
 use App\Http\Controllers\QuestionnaireController;
-use App\Http\Controllers\WorkspaceQuestionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,24 +109,31 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{id}', DeleteWorkspaceAction::class)->name('destroy'); // Delete workspaces
         Route::post('/{workspace}/assign-questions', AssignQuestionsToWorkspaceAction::class);
 
-        Route::put('/{workspace}/questions/{question}', [WorkspaceQuestionController::class, 'updateQuestionSettings'])
+        Route::put('/{workspace}/questions/{question}', UpdateQuestionSettingsAction::class)
             ->name('questions.update-settings');
 
-        Route::delete('/{workspace}/questions/{question}', [WorkspaceQuestionController::class, 'detachQuestion'])
+        Route::delete('/{workspace}/questions/{question}', DetachQuestionFromWorkspaceAction::class)
             ->name('questions.detach');
 
-        Route::post('/{workspace}/questions/reorder', [WorkspaceQuestionController::class, 'reorderQuestions'])
+        Route::post('/{workspace}/questions/reorder', ReorderWorkspaceQuestionsAction::class)
             ->name('questions.reorder');
 
-        Route::post('/{workspace}/questions/{question}/attach', [WorkspaceQuestionController::class, 'attachQuestion'])
+        Route::post('/{workspace}/questions/{question}/attach', AttachQuestionToWorkspaceAction::class)
             ->name('questions.attach');
 
         // Bulk operations
-        Route::post('/bulk-assign-questions', [WorkspaceQuestionController::class, 'bulkAssign'])
+        Route::post('/bulk-assign-questions', BulkAssignQuestionsAction::class)
             ->name('questions.bulk-assign');
 
-        Route::post('/{sourceWorkspace}/copy-questions-to/{targetWorkspace}', [WorkspaceQuestionController::class, 'copyQuestions'])
+        Route::post('/{sourceWorkspace}/copy-questions-to/{targetWorkspace}', CopyQuestionsToWorkspaceAction::class)
             ->name('questions.copy');
+
+        // Get workspace questions
+        Route::get('/{workspace}/questions', GetWorkspaceQuestionsAction::class)
+            ->name('questions.index');
+
+        Route::get('/{workspace}/available-questions', GetAvailableQuestionsAction::class)
+            ->name('questions.available');
     });
 
     Route::prefix('users')->name('admin.user.')->group(function () {
