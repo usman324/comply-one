@@ -48,6 +48,13 @@
                     @endif
                 @endcanany
                 @can('list_customer')
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('/file-managers') }}">
+                                <i class="ri-file-3-fill"></i> <span data-key="t-users">File Managers</span>
+                            </a>
+                        </li>
+                @endcanany
+                @can('list_customer')
                     @if (getUser()->hasRole('workspace'))
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('/customers') }}">
