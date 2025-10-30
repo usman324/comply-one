@@ -4,10 +4,12 @@ namespace App\Actions;
 
 use App\Traits\RespondsWithJson;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Lorisleiva\Actions\Concerns\AsController;
 
 class BaseAction
 {
     use AsAction;
+    use AsController;
     use RespondsWithJson;
 
     protected string $title = '';

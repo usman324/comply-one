@@ -5,29 +5,43 @@ namespace App\Actions\Admin\Questionnaire;
 use App\Actions\BaseAction;
 use App\Models\Questionnaire;
 use App\Models\QuestionnaireResponse;
-use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Http\Request;
+use Lorisleiva\Actions\Concerns\AsAction;
+use Lorisleiva\Actions\Concerns\AsController;
 
 class GetQuestionnaireAction extends BaseAction
 {
     use AsAction;
-
 
     protected string $title = 'Questionnaire';
     protected string $view = 'admin.questionnaire';
     protected string $url = 'questionnaires';
     protected string $permission = 'questionnaire';
 
-    public function handle(?int $id = null)
+    public function handle(?int $id = null): Questionnaire
     {
-        return  $id ? Questionnaire::findOrFail($id) : new Questionnaire();
+        return $id ? Questionnaire::findOrFail($id) : new Questionnaire();
     }
 
     public function asController(Request $request, $id = null)
     {
-        $routeName = $request->route()->getName(); // Get the route name
         $record = $this->handle($id);
         $select_id = $request->select_id;
+        $routeName = $request->route()->getName();
+
+        $analytics = $this->generateAnalytics($record);
+
+        $viewName = match ($routeName) {
+            "{$this->view}.create" => "{$this->view}.create",
+            "{$this->view}.edit"   => "{$this->view}.edit",
+            default                => "{$this->view}.show",
+        };
+
+        return view($viewName, compact('record', 'analytics', 'select_id'));
+    }
+
+    protected function generateAnalytics(Questionnaire $record): array
+    {
         $analytics = [];
         foreach ($record->questions as $question) {
             $answers = QuestionnaireResponse::where('question_id', $question->id)->get();
@@ -36,12 +50,11 @@ class GetQuestionnaireAction extends BaseAction
                 'question' => $question->question,
                 'type' => $question->type,
                 'total_responses' => $answers->count(),
-                'answers' => $answers
+                'answers' => $answers,
             ];
 
-            // Calculate statistics based on question type
-            if ($question->type === 'rating' || $question->type === 'scale') {
-                $values = $answers->pluck('answer')->filter()->map(fn ($v) => (float)$v);
+            if (in_array($question->type, ['rating', 'scale'])) {
+                $values = $answers->pluck('answer')->filter()->map(fn ($v) => (float) $v);
                 $analytics[$question->id]['average'] = $values->avg();
                 $analytics[$question->id]['min'] = $values->min();
                 $analytics[$question->id]['max'] = $values->max();
@@ -54,10 +67,6 @@ class GetQuestionnaireAction extends BaseAction
                     ->toArray();
             }
         }
-        return match ($routeName) {
-            $this->view . '.create' => view($this->view . '.create', get_defined_vars()),
-            $this->view . '.edit' => view($this->view . '.edit', get_defined_vars()),
-            $this->view . '.show' => view($this->view . '.show', get_defined_vars()),
-        };
+        return $analytics;
     }
 }

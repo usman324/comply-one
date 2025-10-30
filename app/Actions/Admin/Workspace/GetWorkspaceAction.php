@@ -8,8 +8,9 @@ use App\Models\Questionnaire;
 use App\Models\Workspace;
 use App\Models\QuestionnaireResponse;
 use App\Models\Section;
+use Lorisleiva\Actions\ActionRequest;
+use Illuminate\Contracts\View\View;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Illuminate\Http\Request;
 
 class GetWorkspaceAction extends BaseAction
 {
@@ -20,16 +21,16 @@ class GetWorkspaceAction extends BaseAction
     protected string $url = 'workspaces';
     protected string $permission = 'workspace';
 
-
-    public function handle(?int $id = null)
+    public function handle(?int $id = null): Workspace
     {
         return $id ? Workspace::findOrFail($id) : new Workspace();
     }
 
-    public function asController(Request $request, $id = null)
+    public function asController(ActionRequest $request, ?int $id = null): View
     {
         $routeName = $request->route()->getName();
         $record = $this->handle($id);
+
         if ($request->assign) {
             // Get all available questions
             $availableQuestions = Question::with(['questionnaire', 'workspaces'])
@@ -38,21 +39,27 @@ class GetWorkspaceAction extends BaseAction
 
             // Get all questionnaires for filtering
             $questionnaires = Questionnaire::orderBy('title')->get();
-            return view($this->view . '.assign-question', get_defined_vars());
+
+            return view("{$this->view}.assign-question", compact(
+                'record',
+                'availableQuestions',
+                'questionnaires'
+            ));
         }
+
         // Get all active questionnaires grouped by section
         $questionnaires = Questionnaire::where('status', 'active')
             ->with(['questions', 'section'])
             ->orderBy('section_id')
             ->get();
+
         // Group questionnaires by section and process questions
         $questionnaireSections = $questionnaires->groupBy('section_id')->map(function ($sectionQuestionnaires, $q_section) {
-            // Get questions and ensure options are properly formatted
             $questions = $sectionQuestionnaires->first()->questions ?? collect([]);
             $section = Section::find($q_section)?->name;
+
             // Process each question to ensure options are arrays
             $questions = $questions->map(function ($question) {
-                // If options exists and is a string, decode it
                 if (isset($question->options)) {
                     if (is_string($question->options)) {
                         $decoded = json_decode($question->options, true);
@@ -65,11 +72,12 @@ class GetWorkspaceAction extends BaseAction
                 }
                 return $question;
             });
+
             return [
                 'name' => ucfirst(str_replace('_', ' ', $section)),
                 'slug' => $section,
                 'description' => $sectionQuestionnaires->first()->description ?? null,
-                'questions' => $questions
+                'questions' => $questions,
             ];
         })->values();
 
@@ -77,8 +85,8 @@ class GetWorkspaceAction extends BaseAction
         $existingResponses = [];
         if ($id) {
             $responses = QuestionnaireResponse::where('workspace_id', $id)->get();
+
             foreach ($responses as $response) {
-                // Try to decode JSON answers (for checkbox/multi-select)
                 $answer = $response->answer;
                 $decoded = json_decode($answer, true);
                 $existingResponses[$response->question_id] = $decoded ?? $answer;
@@ -86,9 +94,15 @@ class GetWorkspaceAction extends BaseAction
         }
 
         return match ($routeName) {
-            $this->view . '.create' => view($this->view . '.create', get_defined_vars()),
-            $this->view . '.edit' => view($this->view . '.edit', get_defined_vars()),
-            $this->view . '.show' => view($this->view . '.show', get_defined_vars()),
+            "{$this->view}.create" => view("{$this->view}.create", compact(
+                'record', 'questionnaires', 'questionnaireSections', 'existingResponses'
+            )),
+            "{$this->view}.edit" => view("{$this->view}.edit", compact(
+                'record', 'questionnaires', 'questionnaireSections', 'existingResponses'
+            )),
+            "{$this->view}.show" => view("{$this->view}.show", compact(
+                'record', 'questionnaires', 'questionnaireSections', 'existingResponses'
+            )),
         };
     }
 }
