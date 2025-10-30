@@ -6,12 +6,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0 float-start">{{ $title }}s</h5>
-                        {{-- @can('add_' . $permission) --}}
-                        <a href="{{$url . '/create'}}" class="btn btn-primary btn-sm float-end"
-                            >
-                            <i class="ri-add-circle-line me-2"></i>Add Questionnaire
-                        </a>
-                        {{-- @endcan --}}
+                        @can('add_' . $permission)
+                            <a href="{{ $url . '/create' }}" class="btn btn-primary btn-sm float-end">
+                                <i class="ri-add-circle-line me-2"></i>Add Questionnaire
+                            </a>
+                        @endcan
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -35,7 +34,7 @@
             </div><!--end col-->
         </div><!--end row-->
     </div>
-    
+
     <div id="editRecord"></div>
     <div id="addRecord"></div>
 @endsection
@@ -60,16 +59,31 @@
                         d.status = $('#status').val();
                     },
                 },
-                columns: [
-                    { data: 'actions' },
-                    { data: 'title' },
-                    { data: 'section' },
-                    { data: 'questions_count' },
-                    { data: 'responses_count' },
-                    { data: 'status' },
-                    { data: 'created_at' }
+                columns: [{
+                        data: 'actions'
+                    },
+                    {
+                        data: 'title'
+                    },
+                    {
+                        data: 'section'
+                    },
+                    {
+                        data: 'questions_count'
+                    },
+                    {
+                        data: 'responses_count'
+                    },
+                    {
+                        data: 'status'
+                    },
+                    {
+                        data: 'created_at'
+                    }
                 ],
-                order: [[6, 'desc']],
+                order: [
+                    [6, 'desc']
+                ],
                 buttons: datatable_buttons,
                 ...datatable_setting
             });

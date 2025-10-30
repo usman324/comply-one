@@ -22,7 +22,7 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <div class="mx-auto avatar-xl mb-3">
-                            <img src="{{asset('dummy.jpeg')}}" alt="{{ $record->name }}"
+                            <img src="{{ asset('dummy.jpeg') }}" alt="{{ $record->name }}"
                                 class="img-thumbnail rounded-circle"
                                 style="width: 120px; height: 120px; object-fit: cover;">
                         </div>
@@ -42,9 +42,11 @@
                     </div>
                     <div class="card-body border-top">
                         <div class="d-flex gap-2">
-                            <a href="{{ route('admin.workspace.edit', $record->id) }}" class="btn btn-primary w-100">
-                                <i class="ri-edit-line align-bottom me-1"></i> Edit Workspace
-                            </a>
+                            @can('edit_' . $permission)
+                                <a href="{{ $url . '/' . $record->id . '/edit' }}" class="btn btn-primary w-100">
+                                    <i class="ri-edit-line align-bottom me-1"></i> Edit Workspace
+                                </a>
+                            @endcan
                             {{-- <button type="button" class="btn btn-soft-danger"
                                 onclick="deleteWorkspace({{ $record->id }})">
                                 <i class="ri-delete-bin-line"></i>
@@ -108,7 +110,7 @@
                                 <a class="nav-link active" data-bs-toggle="tab" href="#overview" role="tab">
                                     <i class="ri-dashboard-line align-bottom me-1"></i> Overview
                                 </a>
-                            </li> 
+                            </li>
                             @foreach ($questionnaireSections as $index => $section)
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#section-{{ $section['slug'] }}"

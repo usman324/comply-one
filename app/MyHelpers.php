@@ -9,6 +9,7 @@ use App\Models\Section;
 use App\Models\Unit;
 use App\Models\UserActivity;
 use App\Models\Warehouse;
+use App\Models\Workspace;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -234,183 +235,11 @@ function saveActivity($data, $user_id = null)
     UserActivity::create($data);
 }
 
-function makeDebitSalesArray($array)
+function workspaces()
 {
-    return array_map(function ($key, $value) {
-        $remarks = $value['notes'];
-        return [
-            'id' => $value['id'],
-            'link' => url('sales/' . $value['id']),
-            'notes' => $remarks,
-            'debit' => $value['total_amount'],
-            'credit' => 0.00,
-            'type' =>  $value['reference'],
-            'date' => $value['date'],
-        ];
-    }, array_keys($array), $array);
-}
-function makeCreditPurchaseArray($array)
-{
-    return array_map(function ($key, $value) {
-        $remarks = $value['notes'];
-        $v_type = 'PI';
-        return [
-            'id' => $value['id'],
-            'link' => url('purchases/' . $value['id']),
-            'notes' => $remarks,
-            'debit' => 0.00,
-            'credit' => $value['total_amount'],
-            'type' =>  $value['reference'],
-            'date' => $value['date'],
-        ];
-    }, array_keys($array), $array);
-}
-function makeCreditReceiptArray($array)
-{
-    return array_map(function ($key, $value) {
-
-        $type = $value['type'];
-        $remarks = $value['notes'];
-        $credit = $value['amount'];
-
-        return [
-            'id' => $value['id'],
-            'link' => url('payment-' . $type . 's/' . $value['id']),
-            'notes' => $remarks,
-            'debit' => 0.00,
-            'credit' => $credit,
-            'type' =>  $value['reference'],
-            'date' => $value['date'],
-        ];
-    }, array_keys($array), $array);
-}
-
-
-function makeDebitReceiptArray($array)
-{
-    return array_map(function ($key, $value) {
-
-        $remarks = $value['description'];
-        $debit = $value['amount'];
-        $v_type = 'SPI';
-        return [
-            'id' => $value['id'],
-            'link' => url('payments/' . $value['id']),
-            'notes' => $remarks,
-            'debit' => $debit,
-            'credit' => 0.00,
-            'type' => $value['reference'],
-            'date' => $value['date'],
-        ];
-    }, array_keys($array), $array);
-}
-function checkStock($type, $product_id, $warehouse_id, $unit_id)
-{
-
-    // 1️⃣ Purchases
-    $purchasesAgg = DB::table('purchase_products as pp')
-        ->join('purchases as p', 'p.id', '=', 'pp.purchase_id')
-        ->select(
-            'pp.product_id',
-            DB::raw('SUM(pp.qty) as purchased_qty'),
-            DB::raw('SUM(pp.piece_qty) as purchased_pieces')
-        )
-        ->whereNull('pp.deleted_at')
-        ->where('p.warehouse_id', $warehouse_id)
-        ->where('pp.product_id', $product_id)
-        ->groupBy('pp.product_id');
-
-    // 2️⃣ Transfer IN
-    $transferInAgg = DB::table('transfer_products as tp')
-        ->join('transfers as t', 't.id', '=', 'tp.transfer_id')
-        ->select(
-            'tp.product_id',
-            DB::raw('SUM(tp.qty) as transfer_in_qty'),
-            DB::raw('SUM(tp.piece_qty) as transfer_in_pieces')
-        )
-        ->whereNull('tp.deleted_at')
-        ->when($unit_id, function ($q) use ($unit_id) {
-            $q->where('t.to_unit_id', $unit_id);
-        })
-        ->where('tp.product_id', $product_id)
-        ->groupBy('tp.product_id');
-
-    // 3️⃣ Transfer OUT
-    $transferOutAgg = DB::table('transfer_products as tp')
-        ->join('transfers as t', 't.id', '=', 'tp.transfer_id')
-        ->select(
-            'tp.product_id',
-            DB::raw('SUM(tp.qty) as transfer_out_qty'),
-            DB::raw('SUM(tp.piece_qty) as transfer_out_pieces')
-        )
-        ->whereNull('tp.deleted_at')
-        ->when($unit_id, function ($q) use ($unit_id) {
-            $q->where('t.from_unit_id', $unit_id);
-        })
-        ->where('tp.product_id', $product_id)
-        ->groupBy('tp.product_id');
-
-    // 4️⃣ Production usage
-    $usedAgg = DB::table('production_uses as pu')
-        ->select(
-            'pu.product_id',
-            DB::raw('SUM(pu.qty_used) as used_qty'),
-            DB::raw('SUM(pu.piece_used) as used_pieces')
-        )
-        ->whereNull('pu.deleted_at')
-        ->when($unit_id, function ($q) use ($unit_id) {
-            $q->where('pu.unit_id', $unit_id);
-        })
-        ->where('pu.product_id', $product_id)
-        ->groupBy('pu.product_id');
-
-    if ($type === 'variation') {
-
-
-        $currentStock = ProductVariation::query()
-            ->select([
-                'product_variations.id as variation_id',
-                'products.title as product_name',
-                DB::raw('COALESCE(pur.purchased_qty, 0) as purchased_qty'),
-                DB::raw('COALESCE(tin.transfer_in_qty, 0) as transfer_in_qty'),
-                DB::raw('COALESCE(tout.transfer_out_qty, 0) as transfer_out_qty'),
-                DB::raw('COALESCE(u.used_qty, 0) as used_qty'),
-                // DB::raw('(COALESCE(pur.purchased_qty,0)  - COALESCE(tout.transfer_out_qty,0) - COALESCE(u.used_qty,0)) as current_stock_qty'),
-
-                DB::raw('COALESCE(pur.purchased_pieces, 0) as purchased_pieces'),
-                DB::raw('COALESCE(tin.transfer_in_pieces, 0) as transfer_in_pieces'),
-                DB::raw('COALESCE(tout.transfer_out_pieces, 0) as transfer_out_pieces'),
-                DB::raw('COALESCE(u.used_pieces, 0) as used_pieces'),
-                // DB::raw('(COALESCE(pur.purchased_pieces,0)  - COALESCE(tout.transfer_out_pieces,0) - COALESCE(u.used_pieces,0)) as current_stock_pieces')
-            ])
-            ->join('products', 'product_variations.product_id', '=', 'products.id')
-            ->leftJoinSub($purchasesAgg, 'pur', 'pur.product_id', '=', 'product_variations.id')
-            ->leftJoinSub($transferInAgg, 'tin', 'tin.product_id', '=', 'product_variations.id')
-            ->leftJoinSub($transferOutAgg, 'tout', 'tout.product_id', '=', 'product_variations.id')
-            ->leftJoinSub($usedAgg, 'u', 'u.product_id', '=', 'product_variations.id')
-            ->where('product_variations.id', $product_id) // specific variation id
-            ->first();
-        dd($currentStock);
-    } else {
-        $currentStock = Product::query()
-            ->select([
-                'products.id',
-                'products.title as product_name',
-                DB::raw('COALESCE(pur.purchased_qty, 0) as purchased_qty'),
-                DB::raw('COALESCE(tin.transfer_in_qty, 0) as transfer_in_qty'),
-                DB::raw('COALESCE(tout.transfer_out_qty, 0) as transfer_out_qty'),
-                DB::raw('COALESCE(u.used_qty, 0) as used_qty'),
-                DB::raw('(COALESCE(pur.purchased_qty,0) ) - COALESCE(tout.transfer_out_qty,0) - COALESCE(u.used_qty,0)) as current_stock_qty'),
-                DB::raw('COALESCE(pur.purchased_pieces, 0) as purchased_pieces'),
-                DB::raw('(COALESCE(pur.purchased_pieces,0)  - COALESCE(tout.transfer_out_pieces,0) - COALESCE(u.used_pieces,0)) as current_stock_pieces')
-            ])
-            ->leftJoinSub($purchasesAgg, 'pur', 'pur.product_id', '=', 'products.id')
-            ->leftJoinSub($transferInAgg, 'tin', 'tin.product_id', '=', 'products.id')
-            ->leftJoinSub($transferOutAgg, 'tout', 'tout.product_id', '=', 'products.id')
-            ->leftJoinSub($usedAgg, 'u', 'u.product_id', '=', 'products.id')
-            ->where('products.id', $product_id)
-            ->first();
-        dd($currentStock);
-    }
-    return $currentStock;
+    $records = Workspace::get([
+        'id',
+        'name',
+    ]);
+    return $records;
 }

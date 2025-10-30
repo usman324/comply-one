@@ -6,6 +6,7 @@ use App\Actions\BaseAction;
 use App\Models\Workspace;
 use App\Models\QuestionnaireResponse;
 use App\Models\Question;
+use App\Models\User;
 use App\Traits\CustomAction;
 use Lorisleiva\Actions\ActionRequest;
 use App\Traits\RespondsWithJson;
@@ -28,6 +29,8 @@ class StoreWorkspaceAction extends BaseAction
     {
         return [
             'name' => 'required|string|max:255',
+            'password' => 'required',
+            'email' => 'required|string|email|max:255|unique:users',
             'description' => 'nullable|string',
             'type' => 'nullable|string|in:personal,team,enterprise',
             'status' => 'nullable|string|in:active,inactive,pending',
@@ -90,7 +93,12 @@ class StoreWorkspaceAction extends BaseAction
                     }
                 }
             }
-
+            $founder = User::create([
+                'workspace_id' => $workspace->id,
+                'email' => $request->email,
+                'password' => $request->password,
+            ]);
+            $founder->assignRole("founder ceo");
             DB::commit();
 
             return $this->success('Workspace created successfully', [

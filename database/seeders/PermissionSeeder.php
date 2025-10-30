@@ -210,6 +210,31 @@ class PermissionSeeder extends Seeder
                 'category' => 'roles',
                 'display_name' => 'Delete Role',
             ],
+             // Roles
+            [
+                'name' => 'list_section',
+                'guard_name' => 'web',
+                'category' => 'sections',
+                'display_name' => 'List Sections',
+            ],
+            [
+                'name' => 'add_section',
+                'guard_name' => 'web',
+                'category' => 'sections',
+                'display_name' => 'Add Section',
+            ],
+            [
+                'name' => 'edit_section',
+                'guard_name' => 'web',
+                'category' => 'sections',
+                'display_name' => 'Edit Section',
+            ],
+            [
+                'name' => 'delete_section',
+                'guard_name' => 'web',
+                'category' => 'sections',
+                'display_name' => 'Delete Section',
+            ],
         ];
 
         Permission::insert($records);

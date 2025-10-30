@@ -24,11 +24,14 @@ class GetUserListAction extends BaseAction
         if ($request->ajax()) {
             $q_length = $request->length;
             $q_start = $request->start;
-            $records_q = User::whereRoleNot(['workspace', 'admin'])
+            $records_q = User::when(!getUser()->hasRole('admin'), function ($q) {
+                $q->where('workspace_id', getUser()->workspace_id);
+            })
                 ->byName($request->name)
                 ->byEmail($request->email)
                 ->byPhone($request->phone)
                 ->byStatus($request->status)
+                ->where('email', '!=', getUser()->email)
                 ->latest();
             $total_records = $records_q->count();
             if ($q_length > 0) {
@@ -40,7 +43,9 @@ class GetUserListAction extends BaseAction
                     $image_url = $record->getImage();
                     return "<img src='$image_url' style='height:50px !important'>";
                 })
-                ->addColumn('name', function ($record) {
+                ->addColumn('workspace', function ($record) {
+                    return $record?->workspace?->name;
+                })->addColumn('name', function ($record) {
                     return $record?->getName();
                 })->addColumn('role', function ($record) {
                     return $record->getRoleNames()?->first();

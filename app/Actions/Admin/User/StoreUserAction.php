@@ -25,7 +25,7 @@ class StoreUserAction extends BaseAction
     public function rules(): array
     {
         return [
-            'first_name' => 'required',
+            // 'first_name' => 'required',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed'],
         ];
@@ -47,6 +47,7 @@ class StoreUserAction extends BaseAction
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'address' => $request->address,
+                'workspace_id' => $request->workspace_id,
                 'phone' => $request->phone,
                 'password' => $request->email,
                 'email' => $request->email,
@@ -61,7 +62,6 @@ class StoreUserAction extends BaseAction
             if ($request->role_id) {
                 $record->assignRole($request->role_id);
             }
-            MetaUserAction::run($request, $record);
             DB::commit();
             return  $this->success('Record Added Successfully');
         } catch (Exception $e) {

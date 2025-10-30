@@ -6,16 +6,12 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0 float-start">{{ $title }}s</h5>
-                        {{-- @can('add_' . $permission) getAddRecord('{{ $url . '/create' }}','#addModel') --}}
-
-                        <button
-                            type="button"
-                            class="btn btn-primary btn-sm float-end"
-                            onclick="window.location.href='{{ $url }}/create'">
-                            <i class="ri-add-circle-line me-2"></i>Add
-                        </button>
-
-                        {{-- @endcan --}}
+                        @can('add_' . $permission)
+                            <button type="button" class="btn btn-primary btn-sm float-end"
+                                onclick="window.location.href='{{ $url }}/create'">
+                                <i class="ri-add-circle-line me-2"></i>Add
+                            </button>
+                        @endcan
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -47,7 +43,7 @@
 @endsection
 @section('script')
 
-<script src="{{ URL::asset('assets/js/pages/form-wizard.init.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/pages/form-wizard.init.js') }}"></script>
     {{-- @include('layout.partial.datatable_script') --}}
     <script>
         $(function() {
@@ -79,9 +75,9 @@
 
                     {
                         data: 'name'
-                    },  {
+                    }, {
                         data: 'type'
-                    },  {
+                    }, {
                         data: 'status'
                     },
 

@@ -55,8 +55,7 @@
                                 <!-- Middle Content Area - Form Steps -->
                                 <div class="col-lg-6">
                                     <div class="px-lg-4" style="height:80vh; overflow:hidden;">
-                                        <div class="tab-content"
-                                            style="height:calc(80vh - 80px); overflow-y:auto;">
+                                        <div class="tab-content" style="height:calc(80vh - 80px); overflow-y:auto;">
                                             <!-- Step 1: Workspace Information -->
                                             <div class="tab-pane fade show active" id="step-workspace" role="tabpanel"
                                                 aria-labelledby="step-workspace-tab">
@@ -81,7 +80,23 @@
                                                         <textarea class="form-control form-control-sm" id="workspace_description" name="description" rows="3"
                                                             placeholder="Brief description of your workspace"></textarea>
                                                     </div>
-
+                                                    <div class="col-md-6">
+                                                        <label for="workspace_name" class="form-label">Founder Email <span
+                                                                class="text-danger">*</span></label>
+                                                        <input type="email" class="form-control form-control-sm"
+                                                            id="workspace_email" name="email"
+                                                            placeholder="Enter workspace email" required>
+                                                        <div class="invalid-feedback">Please enter workspace email</div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="workspace_name" class="form-label">Founder Login
+                                                            Password
+                                                            <span class="text-danger">*</span></label>
+                                                        <input type="password" class="form-control form-control-sm"
+                                                            id="workspace_password" name="password"
+                                                            placeholder="Enter workspace passwrod" required>
+                                                        <div class="invalid-feedback">Please enter workspace passwrod</div>
+                                                    </div>
                                                     <div class="col-md-6">
                                                         <label for="workspace_type" class="form-label">Workspace
                                                             Type</label>
@@ -117,8 +132,8 @@
                                             <!-- Dynamic Questionnaire Steps -->
                                             @foreach ($questionnaireSections as $sectionIndex => $section)
                                                 {{-- @dd($section['questions']) --}}
-                                                <div class="tab-pane fade" id="step-{{ $section['slug'] }}" role="tabpanel"
-                                                    aria-labelledby="step-{{ $section['slug'] }}-tab">
+                                                <div class="tab-pane fade" id="step-{{ $section['slug'] }}"
+                                                    role="tabpanel" aria-labelledby="step-{{ $section['slug'] }}-tab">
                                                     <div>
                                                         <h5>{{ $section['name'] }}</h5>
                                                         <p class="text-muted">

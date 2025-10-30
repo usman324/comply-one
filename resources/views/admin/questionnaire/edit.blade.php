@@ -25,7 +25,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0 float-start">Edit {{ $title }}</h5>
-                        <a href="{{ route($url . '.index') }}" class="btn btn-sm btn-secondary float-end">
+                        <a href="{{ $url }}" class="btn btn-sm btn-secondary float-end">
                             <i class="ri-arrow-left-line me-1"></i> Back to List
                         </a>
                     </div>
@@ -38,7 +38,7 @@
                             <div class="card mb-3">
                                 <div class="card-header bg-soft-primary">
                                     <h6 class="mb-0 float-start">Basic Information</h6>
-                                    <a href="{{ route($url . '.index') }}" class="btn btn-sm float-end btn-outline-danger">
+                                    <a href="{{ $url }}" class="btn btn-sm float-end btn-outline-danger">
                                         <i class="ri-close-line me-1"></i> Cancel
                                     </a>
                                     <button type="submit" class="btn btn-sm float-end me-2 btn-primary">
@@ -530,7 +530,7 @@
 
                 // Submit via AJAX
                 $.ajax({
-                    url: '{{ route($url . '.update', $record->id) }}',
+                    url: '{{ $url . '/' . $record->id }}',
                     method: 'POST',
                     data: formData,
                     processData: false,
@@ -546,7 +546,7 @@
                             timer: 2000,
                             showConfirmButton: false
                         }).then(() => {
-                            window.location.href = '{{ route($url . '.index') }}';
+                            window.location.href = '{{ $url }}';
                         });
                     },
                     error: function(xhr) {

@@ -10,6 +10,20 @@
                 <form class="add-new-user pt-0" id="edit-user">
                     @method('Put')
                     <div class="row">
+                        @if (getUser()->hasRole('admin'))
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Workspace</label>
+                                <select id="workspace_id" name="workspace_id" class="select2 form-control ">
+                                    <option value="">select workspace</option>
+                                    @foreach (workspaces() as $workspace)
+                                        <option value="{{ $workspace->id }}" @selected($record->workspace_id == $workspace->id)>
+                                            {{ $workspace->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @else
+                            <input type="text" hidden name="workspace_id" value="{{ getUser()->workspace_id }}">
+                        @endif
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="add-user-fullname">First Name</label>
                             <input type="text" class="form-control form-control-sm "
@@ -56,18 +70,20 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label" for="add-user-email">Role</label>
-                            <select id="role" name="role_id" class="form-control form-control-sm  select2">
-                                <option value="">select role</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->name }}"
-                                        @if ($role->name === $record->getRoleNames()?->first()) selected @endif>
-                                        {{ $role->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
+                        @can('assign_role')
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label" for="add-user-email">Role</label>
+                                <select id="role" name="role_id" class="form-control form-control-sm  select2">
+                                    <option value="">select role</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->name }}"
+                                            @if ($role->name === $record->getRoleNames()?->first()) selected @endif>
+                                            {{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endcan
+
                     </div>
                     <hr>
                     <button type="button" class="btn btn-pill float-end btn-outline-danger btn-sm "

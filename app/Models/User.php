@@ -96,7 +96,7 @@ class User extends Authenticatable
     {
         $query->whereDoesntHave(
             'roles',
-            fn ($q) => $q->whereIn('name', $role)
+            fn($q) => $q->whereIn('name', $role)
         );
         return $query;
     }
@@ -114,9 +114,9 @@ class User extends Authenticatable
     {
         return $this->name ? $this->name : $this->first_name . ' ' . $this->last_name;
     }
-    public function units()
+    public function workspace()
     {
-        return $this->hasMany(UserUnit::class);
+        return $this->belongsTo(Workspace::class, 'workspace_id', 'id');
     }
     public function getStatus()
     {

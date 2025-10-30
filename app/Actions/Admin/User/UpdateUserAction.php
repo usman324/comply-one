@@ -27,7 +27,7 @@ class UpdateUserAction extends BaseAction
         $id = $request->route('id'); // Get the user ID from the route
 
         return [
-            'first_name' => 'required|string|max:255',
+            // 'first_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'password' => ['nullable', 'confirmed'],
         ];
@@ -50,6 +50,7 @@ class UpdateUserAction extends BaseAction
             $record->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
+                'workspace_id' => $request->workspace_id,
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'password' => $request->email,
@@ -65,7 +66,6 @@ class UpdateUserAction extends BaseAction
                 }
                 $record->assignRole($request->role_id);
             }
-            MetaUserAction::run($request, $record);
             DB::commit();
             return  $this->success('Record Updated Successfully');
         } catch (Exception $e) {

@@ -23,11 +23,6 @@ class RoleSeeder extends Seeder
                 'is_hidden' => 1,
             ],
             [
-                'name' => 'workspace',
-                'guard_name' => 'web',
-                'is_hidden' => 1,
-            ],
-            [
                 'name' => 'founder ceo',
                 'guard_name' => 'web',
                  'is_hidden' => 0,
@@ -63,9 +58,7 @@ class RoleSeeder extends Seeder
 
                 // Questionnaire - Full Access
                 'view_questionnaire',
-                'add_questionnaire',
-                'edit_questionnaire',
-                'delete_questionnaire',
+                
 
                 // Vendors - Full Access
                 'view_vendor',
@@ -90,10 +83,10 @@ class RoleSeeder extends Seeder
 
 
                 // Workspace & Role Management
-                'list_workspace',
-                'add_workspace',
-                'edit_workspace',
-                'delete_workspace',
+                // 'list_workspace',
+                // 'add_workspace',
+                // 'edit_workspace',
+                // 'delete_workspace',
                 'list_role',
                 'add_role',
                 'edit_role',
@@ -109,8 +102,6 @@ class RoleSeeder extends Seeder
 
                 // Questionnaire - Create and Edit
                 'view_questionnaire',
-                'add_questionnaire',
-                'edit_questionnaire',
 
                 // Vendors - Manage (no delete)
                 'view_vendor',
@@ -139,7 +130,6 @@ class RoleSeeder extends Seeder
 
                 // Questionnaire - View and Edit
                 'view_questionnaire',
-                'edit_questionnaire',
 
                 // Vendors - View and Edit
                 'view_vendor',

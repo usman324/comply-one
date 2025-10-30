@@ -3,7 +3,7 @@
         <i class="ri-more-fill align-middle"></i>
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
-        @can('edit_' . $permission)
+        @can('view_' . $permission)
             <li><a class="dropdown-item edit-item-btn" href="{{ $url . '/' . $record->id . '?assign=1' }}"><i
                         class="ri-eye-fill align-bottom me-2 text-muted"></i>
                     Assign Questions</a>
