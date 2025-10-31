@@ -12,3 +12,4 @@ We’re on a mission to make compliance easy by centralizing everything in one p
 
 -- php artisan migrate --seed
 
+ ./vendor/bin/pint --preset psr12

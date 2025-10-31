@@ -41,6 +41,21 @@
                         @endif
                     </div>
                     <div class="card-body border-top">
+                        <div class="d-flex gap-2 mb-2">
+                            @can('edit_' . $permission)
+                                <a href="{{ $url . '/' . $record->id . '/users' }}" class="btn btn-primary w-100">
+                                    <i class="ri-group-line align-bottom me-1"></i> Manage Users
+                                </a>
+                            @endcan
+                            @can('edit_' . $permission)
+                            {{-- {{ url('/file-managers') }} --}}
+                                <a href="{{ $url . '/' . $record->id . '/edit' }}" class="btn btn-primary w-100">
+                                    <i class="ri-folder-add-fill align-bottom me-1"></i> Manage Files
+                                </a>
+                            @endcan
+
+                        </div>
+
                         <div class="d-flex gap-2">
                             @can('edit_' . $permission)
                                 <a href="{{ $url . '/' . $record->id . '/edit' }}" class="btn btn-primary w-100">

@@ -49,6 +49,99 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
+ * @property int $workspace_id
+ * @property int|null $folder_id
+ * @property int $uploaded_by_user_id
+ * @property string $original_name
+ * @property string $display_name
+ * @property string $file_path
+ * @property int $file_size
+ * @property string|null $mime_type
+ * @property string|null $extension
+ * @property string|null $description
+ * @property array<array-key, mixed>|null $tags
+ * @property bool $is_starred
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Folder|null $folder
+ * @property-read mixed $file_icon
+ * @property-read mixed $formatted_size
+ * @property-read \App\Models\User|null $uploader
+ * @property-read \App\Models\Workspace|null $workspace
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File active()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File ofType($type)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File recent($days = 7)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File search($term)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File starred()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereExtension($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereFilePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereFileSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereFolderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereIsStarred($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereMimeType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereOriginalName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereUploadedByUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereWorkspaceId($value)
+ */
+	class File extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property int $workspace_id
+ * @property int|null $parent_folder_id
+ * @property int $created_by_user_id
+ * @property string $name
+ * @property string|null $description
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Folder> $childFolders
+ * @property-read int|null $child_folders_count
+ * @property-read \App\Models\User $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\File> $files
+ * @property-read int|null $files_count
+ * @property-read mixed $file_count
+ * @property-read mixed $folder_size
+ * @property-read Folder|null $parentFolder
+ * @property-read \App\Models\Workspace $workspace
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder active()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder root()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereCreatedByUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereParentFolderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Folder whereWorkspaceId($value)
+ */
+	class Folder extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
  * @property int|null $user_id
  * @property string|null $title
  * @property string|null $logo_height
@@ -120,10 +213,19 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Questionnaire $questionnaire
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuestionnaireResponse> $responses
+ * @property-read int|null $responses_count
+ * @property-read \App\Models\Questionnaire|null $section
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Workspace> $workspaces
+ * @property-read int|null $workspaces_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question inSection($sectionId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Question newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Question newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question ofType($type)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Question onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question ordered()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Question query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Question required()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Question whereDescription($value)
@@ -145,12 +247,10 @@ namespace App\Models{
 /**
  * @property int $id
  * @property int $user_id
- * @property string $section
+ * @property int $section_id
  * @property string|null $question_id
  * @property string $title
  * @property string $status
- * @property \Illuminate\Support\Carbon $start_date
- * @property \Illuminate\Support\Carbon $end_date
  * @property string|null $description
  * @property string|null $message
  * @property string $type
@@ -169,6 +269,7 @@ namespace App\Models{
  * @property-read int|null $questions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuestionnaireResponse> $responses
  * @property-read int|null $responses_count
+ * @property-read \App\Models\Section|null $section
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire bySection(string $section)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire newQuery()
@@ -180,7 +281,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereDependsOn($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereMessage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereOptions($value)
@@ -188,9 +288,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereQuestionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereRandomizeQuestions($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereRequired($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereSection($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereSectionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereShowProgress($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Questionnaire whereType($value)
@@ -219,7 +318,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\Questionnaire $questionnaire
- * @property-read \App\Models\User $user
+ * @property-read \App\Models\User|null $user
  * @property-read \App\Models\Workspace $workspace
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse byQuestion(string $questionId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|QuestionnaireResponse bySection(string $section)
@@ -251,6 +350,29 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
+ * @property string $name
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section withoutTrashed()
+ */
+	class Section extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property int|null $workspace_id
  * @property string|null $name
  * @property string|null $username
  * @property string|null $first_name
@@ -279,6 +401,7 @@ namespace App\Models{
  * @property string|null $pm_type
  * @property string|null $pm_last_four
  * @property string|null $trial_ends_at
+ * @property-read string $full_name
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
@@ -287,6 +410,7 @@ namespace App\Models{
  * @property-read int|null $roles_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Cashier\Subscription> $subscriptions
  * @property-read int|null $subscriptions_count
+ * @property-read \App\Models\Workspace|null $workspace
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User byEmail($email)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User byName($name)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User byPhone($phone)
@@ -330,6 +454,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUserNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereWorkspaceId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereWorkspaceType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)
@@ -435,18 +560,20 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $creator
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $members
- * @property-read int|null $members_count
  * @property-read \App\Models\User|null $owner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuestionnaireResponse> $questionnaireResponses
  * @property-read int|null $questionnaire_responses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Question> $questions
+ * @property-read int|null $questions_count
  * @property-read \App\Models\User|null $updater
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace byName($name)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace byStatus($status)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace byType($type)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace active()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace ofType($type)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace ownedBy($userId)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Workspace whereCreatedAt($value)
@@ -487,5 +614,32 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceDraft whereUserId($value)
  */
 	class WorkspaceDraft extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
+ * @property int $workspace_id
+ * @property int $question_id
+ * @property int $order
+ * @property int $is_required
+ * @property string|null $workspace_specific_options
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereIsRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereQuestionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereWorkspaceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|WorkspaceQuestion whereWorkspaceSpecificOptions($value)
+ */
+	class WorkspaceQuestion extends \Eloquent {}
 }
 

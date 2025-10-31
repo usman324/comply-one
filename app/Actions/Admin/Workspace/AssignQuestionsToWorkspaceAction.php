@@ -292,4 +292,3 @@ class AssignQuestionsToWorkspaceAction extends BaseAction
         }
     }
 }
-

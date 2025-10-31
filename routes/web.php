@@ -27,7 +27,7 @@ use App\Actions\Admin\Section\GetSectionAction;
 use App\Actions\Admin\Section\GetSectionListAction;
 use App\Actions\Admin\Section\StoreSectionAction;
 use App\Actions\Admin\Section\UpdateSectionAction;
-use App\Actions\Admin\User\ActivityUserListAction;
+use App\Actions\Admin\Workspace\User\ActivityUserListAction;
 use App\Actions\Admin\User\UpdateUserAction;
 use App\Actions\Admin\Workspace\DeleteWorkspaceAction;
 use App\Actions\Admin\Workspace\GetWorkspaceAction;
@@ -43,6 +43,11 @@ use App\Actions\Admin\Workspace\BulkAssignQuestionsAction;
 use App\Actions\Admin\Workspace\CopyQuestionsToWorkspaceAction;
 use App\Actions\Admin\Workspace\GetWorkspaceQuestionsAction;
 use App\Actions\Admin\Workspace\GetAvailableQuestionsAction;
+use App\Actions\Admin\Workspace\User\AddWorkspaceUserAction;
+use App\Actions\Admin\Workspace\User\DeleteWorkspaceUserAction;
+use App\Actions\Admin\Workspace\User\GetWorkspaceUserAction;
+use App\Actions\Admin\Workspace\User\GetWorkspaceUserListAction;
+use App\Actions\Admin\Workspace\User\UpdateWorkspaceUserAction;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\FolderController;
@@ -106,42 +111,98 @@ Route::middleware('auth')->group(function () {
         Route::post('/', StoreWorkspaceAction::class)->name('store');
         Route::put('/{id}', UpdateWorkspaceAction::class)->name('update');
         Route::delete('/{id}', DeleteWorkspaceAction::class)->name('destroy');
-        Route::post('/{workspace}/assign-questions', AssignQuestionsToWorkspaceAction::class);
 
-        Route::put('/{workspace}/questions/{question}', UpdateQuestionSettingsAction::class)
-            ->name('questions.update-settings');
+        Route::prefix('/{workspace}')->group(function () {
+            Route::post('/assign-questions', AssignQuestionsToWorkspaceAction::class);
 
-        Route::delete('/{workspace}/questions/{question}', DetachQuestionFromWorkspaceAction::class)
-            ->name('questions.detach');
+            Route::prefix('/questions')->name('questions.')->group(function () {
+                // Get workspace questions
+                Route::get('/', GetWorkspaceQuestionsAction::class)
+                    ->name('index');
+                Route::put('/{question}', UpdateQuestionSettingsAction::class)
+                    ->name('update-settings');
 
-        Route::post('/{workspace}/questions/reorder', ReorderWorkspaceQuestionsAction::class)
-            ->name('questions.reorder');
+                Route::delete('/{question}', DetachQuestionFromWorkspaceAction::class)
+                    ->name('questions.detach');
 
-        Route::post('/{workspace}/questions/{question}/attach', AttachQuestionToWorkspaceAction::class)
-            ->name('questions.attach');
+                Route::post('/reorder', ReorderWorkspaceQuestionsAction::class)
+                    ->name('reorder');
+
+                Route::post('/{question}/attach', AttachQuestionToWorkspaceAction::class)
+                    ->name('attach');
+            });
+
+            Route::get('/available-questions', GetAvailableQuestionsAction::class)
+                ->name('questions.available');
+
+            // Folder Routes
+            Route::prefix('folders')->name('folders.')->group(function () {
+                Route::get('/', [FolderController::class, 'index'])->name('index');
+                Route::get('/create', [FolderController::class, 'create'])->name('create');
+                Route::post('/', [FolderController::class, 'store'])->name('store');
+                Route::get('/{folder}', [FolderController::class, 'show'])->name('show');
+                Route::get('/{folder}/edit', [FolderController::class, 'edit'])->name('edit');
+                Route::put('/{folder}', [FolderController::class, 'update'])->name('update');
+                Route::delete('/{folder}', [FolderController::class, 'destroy'])->name('destroy');
+
+                // Additional folder actions
+                Route::post('/{folder}/move', [FolderController::class, 'move'])->name('move');
+                Route::post('/{folder}/archive', [FolderController::class, 'archive'])->name('archive');
+                Route::post('/{folder}/restore', [FolderController::class, 'restore'])->name('restore');
+            });
+
+            // File Routes
+            Route::prefix('files')->name('files.')->group(function () {
+                Route::get('/', [FileController::class, 'index'])->name('index');
+                Route::get('/create', [FileController::class, 'create'])->name('create');
+                Route::post('/', [FileController::class, 'store'])->name('store');
+                Route::get('/{file}', [FileController::class, 'show'])->name('show');
+                Route::get('/{file}/edit', [FileController::class, 'edit'])->name('edit');
+                Route::put('/{file}', [FileController::class, 'update'])->name('update');
+                Route::delete('/{file}', [FileController::class, 'destroy'])->name('destroy');
+
+                // File-specific actions
+                Route::get('/{file}/download', [FileController::class, 'download'])->name('download');
+                Route::post('/{file}/toggle-star', [FileController::class, 'toggleStar'])->name('toggle-star');
+                Route::post('/{file}/move', [FileController::class, 'move'])->name('move');
+                Route::post('/{file}/archive', [FileController::class, 'archive'])->name('archive');
+                Route::post('/{file}/restore', [FileController::class, 'restore'])->name('restore');
+                Route::delete('/{file}/force', [FileController::class, 'forceDestroy'])->name('force-destroy');
+
+                // Bulk operations
+                Route::post('/bulk-delete', [FileController::class, 'bulkDelete'])->name('bulk-delete');
+                Route::post('/bulk-move', [FileController::class, 'bulkMove'])->name('bulk-move');
+                Route::post('/bulk-archive', [FileController::class, 'bulkArchive'])->name('bulk-archive');
+            });
+
+            Route::get('/file-managers', [FileManagerController::class, 'index'])->name('file-manager');
+
+            Route::prefix('/users')->name('user.')->group(function () {
+                Route::get('/', GetWorkspaceUserListAction::class);
+                Route::get('/create', GetWorkspaceUserAction::class)->name('create');
+                Route::get('/{user:id}', GetWorkspaceUserAction::class)->name('show');
+                Route::get('/{user:id}/edit', GetWorkspaceUserAction::class)->name('edit');
+                Route::post('/', AddWorkspaceUserAction::class)->name('store');
+                Route::put('/{user:id}', UpdateWorkspaceUserAction::class)->name('update');
+
+                Route::delete('/{id}', DeleteWorkspaceUserAction::class)->name('destroy');
+            });
+        });
+        Route::post('/{sourceWorkspace}/copy-questions-to/{targetWorkspace}', CopyQuestionsToWorkspaceAction::class)
+            ->name('questions.copy');
 
         // Bulk operations
         Route::post('/bulk-assign-questions', BulkAssignQuestionsAction::class)
             ->name('questions.bulk-assign');
-
-        Route::post('/{sourceWorkspace}/copy-questions-to/{targetWorkspace}', CopyQuestionsToWorkspaceAction::class)
-            ->name('questions.copy');
-
-        // Get workspace questions
-        Route::get('/{workspace}/questions', GetWorkspaceQuestionsAction::class)
-            ->name('questions.index');
-
-        Route::get('/{workspace}/available-questions', GetAvailableQuestionsAction::class)
-            ->name('questions.available');
     });
 
     Route::prefix('users')->name('admin.user.')->group(function () {
         Route::get('/', GetUserListAction::class);
         Route::get('/create', GetUserAction::class)->name('create');
         Route::get('/{id}', GetUserAction::class)->name('show');
-        Route::get('/{id}/edit', GetUserAction::class)->name('edit');
         Route::post('/', StoreUserAction::class)->name('store');
         Route::put('/{id}', UpdateUserAction::class)->name('update');
+        Route::get('/{id}/edit', GetUserAction::class)->name('edit');
         Route::delete('/{id}', DeleteUserAction::class)->name('destroy');
     });
 
@@ -161,47 +222,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', UpdateGenerelSettingAction::class)->name('update');
     });
 
-    Route::get('/file-managers', [FileManagerController::class, 'index'])->name('file-manager');
 
-    // Folder Routes
-    Route::prefix('folders')->name('folders.')->group(function () {
-        Route::get('/', [FolderController::class, 'index'])->name('index');
-        Route::get('/create', [FolderController::class, 'create'])->name('create');
-        Route::post('/', [FolderController::class, 'store'])->name('store');
-        Route::get('/{folder}', [FolderController::class, 'show'])->name('show');
-        Route::get('/{folder}/edit', [FolderController::class, 'edit'])->name('edit');
-        Route::put('/{folder}', [FolderController::class, 'update'])->name('update');
-        Route::delete('/{folder}', [FolderController::class, 'destroy'])->name('destroy');
 
-        // Additional folder actions
-        Route::post('/{folder}/move', [FolderController::class, 'move'])->name('move');
-        Route::post('/{folder}/archive', [FolderController::class, 'archive'])->name('archive');
-        Route::post('/{folder}/restore', [FolderController::class, 'restore'])->name('restore');
-    });
-
-    // File Routes
-    Route::prefix('files')->name('files.')->group(function () {
-        Route::get('/', [FileController::class, 'index'])->name('index');
-        Route::get('/create', [FileController::class, 'create'])->name('create');
-        Route::post('/', [FileController::class, 'store'])->name('store');
-        Route::get('/{file}', [FileController::class, 'show'])->name('show');
-        Route::get('/{file}/edit', [FileController::class, 'edit'])->name('edit');
-        Route::put('/{file}', [FileController::class, 'update'])->name('update');
-        Route::delete('/{file}', [FileController::class, 'destroy'])->name('destroy');
-
-        // File-specific actions
-        Route::get('/{file}/download', [FileController::class, 'download'])->name('download');
-        Route::post('/{file}/toggle-star', [FileController::class, 'toggleStar'])->name('toggle-star');
-        Route::post('/{file}/move', [FileController::class, 'move'])->name('move');
-        Route::post('/{file}/archive', [FileController::class, 'archive'])->name('archive');
-        Route::post('/{file}/restore', [FileController::class, 'restore'])->name('restore');
-        Route::delete('/{file}/force', [FileController::class, 'forceDestroy'])->name('force-destroy');
-
-        // Bulk operations
-        Route::post('/bulk-delete', [FileController::class, 'bulkDelete'])->name('bulk-delete');
-        Route::post('/bulk-move', [FileController::class, 'bulkMove'])->name('bulk-move');
-        Route::post('/bulk-archive', [FileController::class, 'bulkArchive'])->name('bulk-archive');
-    });
 
     // Statistics and Reports
     Route::get('/statistics', [FileManagerController::class, 'statistics'])->name('statistics');

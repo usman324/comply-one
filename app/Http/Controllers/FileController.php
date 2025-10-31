@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
-use App\Models\Folder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -113,10 +112,10 @@ class FileController extends Controller
             $extension = $uploadedFile->getClientOriginalExtension();
             $mimeType = $uploadedFile->getMimeType();
             $fileSize = $uploadedFile->getSize();
-            
+
             // Generate unique filename
             $fileName = Str::uuid() . '.' . $extension;
-            
+
             // Store file
             $filePath = $uploadedFile->storeAs('uploads', $fileName, 'public');
 
@@ -190,7 +189,7 @@ class FileController extends Controller
             $mapping = $typeMapping[$request->file_type] ?? ['extension' => 'txt', 'mime_type' => 'text/plain'];
             $fileName = $request->display_name . '.' . $mapping['extension'];
             $fileSizeBytes = $request->file_size * 1024 * 1024; // Convert MB to bytes
-            
+
             $file = File::create([
                 'workspace_id' => $request->workspace_id,
                 'folder_id' => $request->folder_id,

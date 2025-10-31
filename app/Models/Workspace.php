@@ -214,6 +214,14 @@ class Workspace extends Model
     }
 
     /**
+     * Creator relationship
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class, 'workspace_id', 'id');
+    }
+
+    /**
      * Get avatar URL
      */
     public function getAvatarUrl()

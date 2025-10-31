@@ -125,7 +125,7 @@ class FolderController extends Controller
             'file_count' => $folder->files_count,
             'folder_size' => $this->formatBytes($folder->files->sum('file_size')),
             'breadcrumb' => $folder->getBreadcrumb(),
-           
+
         ];
 
         return response()->json([
@@ -323,11 +323,11 @@ class FolderController extends Controller
     private function formatBytes($bytes, $precision = 2)
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        
+
         for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }
-        
+
         return round($bytes, $precision) . ' ' . $units[$i];
     }
 }

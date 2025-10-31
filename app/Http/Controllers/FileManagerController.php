@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Folder;
 use App\Models\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class FileManagerController extends Controller
 {
@@ -28,7 +27,7 @@ class FileManagerController extends Controller
             ->with(['files' => function ($query) {
                 $query->where('status', 'active');
             }]);
-            $folders=[];
+        $folders = [];
         // if ($folderId) {
         //     $foldersQuery->where('parent_folder_id', $folderId);
         // } else {

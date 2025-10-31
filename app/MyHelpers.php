@@ -3,15 +3,12 @@
 use App\Models\Carton;
 use App\Models\Customer;
 use App\Models\GeneralSetting;
-use App\Models\Product;
-use App\Models\ProductVariation;
 use App\Models\Section;
 use App\Models\Unit;
 use App\Models\UserActivity;
 use App\Models\Warehouse;
 use App\Models\Workspace;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 

@@ -6,7 +6,6 @@ use App\Models\Question;
 use App\Models\Questionnaire;
 use App\Models\Section;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class QuestionnaireSeeder extends Seeder
 {

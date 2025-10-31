@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Admin\Workspace;
+namespace App\Actions\Admin\Workspace\User;
 
 use App\Actions\BaseAction;
 use App\Models\Question;
@@ -8,28 +8,26 @@ use App\Models\Questionnaire;
 use App\Models\Workspace;
 use App\Models\QuestionnaireResponse;
 use App\Models\Section;
+use App\Models\User;
 use Lorisleiva\Actions\ActionRequest;
 use Illuminate\Contracts\View\View;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Spatie\Permission\Models\Role;
 
-class GetWorkspaceAction extends BaseAction
+class GetWorkspaceUserAction extends BaseAction
 {
     use AsAction;
 
     protected string $title = 'Workspace';
-    protected string $view = 'admin.workspace';
+    protected string $view = 'admin.workspace.user';
     protected string $url = 'workspaces';
     protected string $permission = 'workspace';
 
-    public function handle(?int $id = null): Workspace
-    {
-        return $id ? Workspace::findOrFail($id) : new Workspace();
-    }
-
-    public function asController(ActionRequest $request, ?int $id = null): View
+    public function asController(ActionRequest $request, ?Workspace $workspace, User $user): View
     {
         $routeName = $request->route()->getName();
-        $record = $this->handle($id);
+        $record = $user;
+        $roles = Role::all();
 
         if ($request->assign) {
             // Get all available questions
@@ -83,8 +81,8 @@ class GetWorkspaceAction extends BaseAction
 
         // Get existing responses if editing
         $existingResponses = [];
-        if ($id) {
-            $responses = QuestionnaireResponse::where('workspace_id', $id)->get();
+        if ($record) {
+            $responses = QuestionnaireResponse::whereBelongsTo($record)->get();
 
             foreach ($responses as $response) {
                 $answer = $response->answer;
@@ -98,19 +96,22 @@ class GetWorkspaceAction extends BaseAction
                 'record',
                 'questionnaires',
                 'questionnaireSections',
-                'existingResponses'
+                'existingResponses',
+                'roles'
             )),
             "{$this->view}.edit" => view("{$this->view}.edit", compact(
                 'record',
                 'questionnaires',
                 'questionnaireSections',
-                'existingResponses'
+                'existingResponses',
+                'roles'
             )),
             "{$this->view}.show" => view("{$this->view}.show", compact(
                 'record',
                 'questionnaires',
                 'questionnaireSections',
-                'existingResponses'
+                'existingResponses',
+                'roles'
             )),
         };
     }

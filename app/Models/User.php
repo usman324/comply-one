@@ -27,7 +27,29 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'workspace_id',
+        'name',
+        'username',
+        'first_name',
+        'last_name',
+        'image',
+        'phone',
+        'avatar',
+        'address',
+        'email',
+        'otp',
+        'dob',
+        'joining_date',
+        'country',
+        'city',
+        'qualification',
+        'user_number',
+        'email_verified_at',
+        'password',
+        'workspace_type',
+        'status',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -96,7 +118,7 @@ class User extends Authenticatable
     {
         $query->whereDoesntHave(
             'roles',
-            fn($q) => $q->whereIn('name', $role)
+            fn ($q) => $q->whereIn('name', $role)
         );
         return $query;
     }
@@ -110,6 +132,17 @@ class User extends Authenticatable
     {
         return $this->hasRole('Parent');
     }
+
+    /**
+     * Get the user's full name by combining first and last name.
+     *
+     * @return string
+     */
+    public function getFullNameAttribute(): string
+    {
+        return trim("{$this->first_name} {$this->last_name}");
+    }
+
     public function getName()
     {
         return $this->name ? $this->name : $this->first_name . ' ' . $this->last_name;

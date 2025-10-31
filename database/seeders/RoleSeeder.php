@@ -58,7 +58,7 @@ class RoleSeeder extends Seeder
 
                 // Questionnaire - Full Access
                 'view_questionnaire',
-                
+
 
                 // Vendors - Full Access
                 'view_vendor',
