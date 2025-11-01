@@ -14,7 +14,7 @@ class GetWorkspaceUserListAction extends BaseAction
     use AsAction;
     use AsController;
 
-    protected string $title = 'Workspace';
+    protected string $title = 'Workspace User';
     protected string $view = 'admin.workspace.user';
     public string $url = 'workspaces';
     protected string $permission = 'workspace';

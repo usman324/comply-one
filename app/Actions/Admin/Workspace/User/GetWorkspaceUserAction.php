@@ -18,7 +18,7 @@ class GetWorkspaceUserAction extends BaseAction
 {
     use AsAction;
 
-    protected string $title = 'Workspace';
+    protected string $title = 'Workspace User';
     protected string $view = 'admin.workspace.user';
     protected string $url = 'workspaces';
     protected string $permission = 'workspace';
@@ -94,6 +94,7 @@ class GetWorkspaceUserAction extends BaseAction
         return match ($routeName) {
             "{$this->view}.create" => view("{$this->view}.create", compact(
                 'record',
+                'workspace',
                 'questionnaires',
                 'questionnaireSections',
                 'existingResponses',
@@ -101,6 +102,7 @@ class GetWorkspaceUserAction extends BaseAction
             )),
             "{$this->view}.edit" => view("{$this->view}.edit", compact(
                 'record',
+                'workspace',
                 'questionnaires',
                 'questionnaireSections',
                 'existingResponses',
@@ -108,6 +110,7 @@ class GetWorkspaceUserAction extends BaseAction
             )),
             "{$this->view}.show" => view("{$this->view}.show", compact(
                 'record',
+                'workspace',
                 'questionnaires',
                 'questionnaireSections',
                 'existingResponses',

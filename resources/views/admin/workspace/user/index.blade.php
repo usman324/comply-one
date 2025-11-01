@@ -1,53 +1,54 @@
 @extends('layout.master')
 @section('content')
-    <div class="container-fluid ">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0 float-start">{{ $title }}s</h5>
-                        @can('add_' . $permission)
-                            <button type="button" class="btn btn-primary  btn-sm  btn-primary float-end"
-                                onclick="getAddRecord('{{ url()->full(). '/create' }}','#addModel')"><i
-                                    class="ri-add-circle-line me-2"></i>Add
-                            </button>
-                        @endcan
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="myTable" class="table table-bordered  nowrap table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 20px;"></th>
-                                        <th>Workspace</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Role</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0 float-start">{{$workspace->name.' ' . $title }}s</h5>
+                    @can('add_' . $permission)
+                    <button type="button" class="btn btn-primary  btn-sm  btn-primary float-end"
+                        onclick="getAddRecord('{{ url()->full(). '/create' }}','#addModel')"><i
+                            class="ri-add-circle-line me-2"></i>Add
+                    </button>
+                    @endcan
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="myTable" class="table table-bordered  nowrap table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20px;"></th>
+                                    <th>Workspace</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div><!--end col-->
-        </div><!--end row-->
+            </div>
+        </div>
+        <!--end col-->
     </div>
-    <div id="editRecord">
+    <!--end row-->
+</div>
+<div id="editRecord">
 
-    </div>
-    <div id="addRecord">
+</div>
+<div id="addRecord">
 
-    </div>
+</div>
 @endsection
 @section('script')
-    <script>
-
-        $(function() {
+<script>
+    $(function() {
             myTable = $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -104,7 +105,6 @@
             });
             $('#myTable_info').addClass('float-right')
             $('#myTable_paginate').addClass('float-end')
-            // $('div.head-label').html('<h5 class="card-title mb-0">Users List</h5>');
         });
-    </script>
+</script>
 @stop

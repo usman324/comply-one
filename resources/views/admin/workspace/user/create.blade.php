@@ -45,7 +45,7 @@
                         </div>
                         @can('assign_role')
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Role</label>
+                                <label for="role"  class="form-label">Role</label>
                                 <select id="role" name="role_id" class="select2 form-control ">
                                     <option value="">select role</option>
                                     @foreach ($roles as $role)
@@ -59,7 +59,7 @@
                     <button type="button" class="btn btn-pill btn-outline-danger float-end btn-sm "
                         data-bs-dismiss="modal" aria-label="Close">Cancel</button>
                     <button type="button"
-                        onclick="addFormData(event,'post','{{ $url.'/'.$record->id.'/users' }}','{{ $url }}','add-user')"
+                        onclick="addFormData(event,'post','{{ $url.'/'.$workspace->id.'/users' }}','{{ $url }}','add-user')"
                         class="btn btn-primary btn-pill btn-sm me-sm-3 float-end me-1 data-submit">Save</button>
                 </form>
             </div>
@@ -67,12 +67,9 @@
     </div>
 </div>
 <script>
-    // $('.select2').select2()
-
     $('.select2').each(function() {
         var $this = $(this);
         $this.wrap('<div class="position-relative"></div>').select2({
-            // placeholder: 'Select value',
             dropdownParent: $this.parent()
         });
     });
