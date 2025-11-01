@@ -48,8 +48,7 @@
                                 </a>
                             @endcan
                             @can('edit_' . $permission)
-                            {{-- {{ url('/file-managers') }} --}}
-                                <a href="{{ $url . '/' . $record->id . '/edit' }}" class="btn btn-primary w-100">
+                                <a href="{{ $url . '/' . $record->id . '/file-managers' }}" class="btn btn-primary w-100">
                                     <i class="ri-folder-add-fill align-bottom me-1"></i> Manage Files
                                 </a>
                             @endcan
@@ -62,10 +61,6 @@
                                     <i class="ri-edit-line align-bottom me-1"></i> Edit Workspace
                                 </a>
                             @endcan
-                            {{-- <button type="button" class="btn btn-soft-danger"
-                                onclick="deleteWorkspace({{ $record->id }})">
-                                <i class="ri-delete-bin-line"></i>
-                            </button> --}}
                         </div>
                     </div>
                 </div>
@@ -266,11 +261,11 @@
                                                         questions</span>
                                                 </div>
                                                 <div class="progress" style="height: 8px;">
-                                                    <div class="progress-bar {{ $percentage == 100 ? 'bg-success' : 'bg-primary' }}"
-                                                        role="progressbar" style="width: {{ $percentage }}%"
-                                                        aria-valuenow="{{ $percentage }}" aria-valuemin="0"
-                                                        aria-valuemax="100">
-                                                    </div>
+                                                    <progress
+                                                        class="progress {{ $percentage == 100 ? 'bg-success' : 'bg-primary' }}"
+                                                        value="{{ $percentage }}"
+                                                        max="100">
+                                                    </progress>
                                                 </div>
                                             </div>
                                         @endforeach
