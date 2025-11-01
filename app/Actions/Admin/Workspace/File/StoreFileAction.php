@@ -21,7 +21,7 @@ class StoreFileAction extends BaseAction
     public function rules(): array
     {
         return [
-            'file' => 'required|file|max:102400', // Max 100MB
+            'file' => 'required|file|max:102400',
             'workspace_id' => 'required|integer|exists:workspaces,id',
             'folder_id' => 'nullable|integer|exists:folders,id',
             'display_name' => 'nullable|string|max:255',

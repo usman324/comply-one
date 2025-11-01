@@ -4,12 +4,9 @@ namespace App\Actions\Admin\Workspace\File;
 
 use App\Actions\BaseAction;
 use App\Models\File;
-use App\Traits\CustomAction;
-use App\Traits\RespondsWithJson;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Lorisleiva\Actions\ActionRequest;
-use Lorisleiva\Actions\Concerns\AsAction;
 
 class StoreDemoFileAction extends BaseAction
 {
