@@ -1,6 +1,6 @@
 <script>
     // Configuration
-    const WORKSPACE_ID = 1; // Default workspace ID
+    const WORKSPACE_ID = '{{ $workspace->id }}'; // Default workspace ID
     const USER_ID = '{{ getUser()->id }}'; // Default user ID
 
     // State
@@ -466,8 +466,8 @@
 
         let html = `
         <div class="hierarchy-folder-wrapper">
-            <div class="hierarchy-folder-item" 
-                 data-folder-id="${folder.id}" 
+            <div class="hierarchy-folder-item"
+                 data-folder-id="${folder.id}"
                  data-folder-name="${folder.name}"
                  style="padding-left: ${indent}rem;">
                 ${hasChildren ? `
@@ -534,7 +534,7 @@
         currentFolderPath.forEach((folder, index) => {
             html += `
             <i class="ri-arrow-right-s-line text-muted"></i>
-            <a href="javascript:void(0);" class="breadcrumb-item-modern ${index === currentFolderPath.length - 1 ? 'active' : ''}" 
+            <a href="javascript:void(0);" class="breadcrumb-item-modern ${index === currentFolderPath.length - 1 ? 'active' : ''}"
                onclick="navigateToFolder(${index})">
                 ${folder.name}
             </a>
@@ -675,7 +675,7 @@
                         <i class="ri-more-2-fill"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end context-menu-modern">
-                       
+
                         <li>
                             <a class="context-menu-item" href="/files/${file.id}/download">
                                 <i class="ri-download-line"></i>

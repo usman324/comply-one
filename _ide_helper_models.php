@@ -560,6 +560,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Folder> $folders
+ * @property-read int|null $folders_count
  * @property-read \App\Models\User|null $owner
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuestionnaireResponse> $questionnaireResponses
  * @property-read int|null $questionnaire_responses_count

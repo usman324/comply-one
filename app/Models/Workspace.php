@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Workspace extends Model
@@ -38,6 +39,11 @@ class Workspace extends Model
             ->withPivot(['order', 'is_required', 'workspace_specific_options'])
             ->withTimestamps()
             ->orderBy('workspace_questions.order');
+    }
+
+    public function folders(): HasMany
+    {
+        return $this->hasMany(Folder::class);
     }
 
     /**

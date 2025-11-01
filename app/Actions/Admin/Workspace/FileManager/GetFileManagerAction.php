@@ -1,44 +1,31 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Actions\Admin\Workspace\FileManager;
 
-use App\Models\Folder;
+use App\Actions\BaseAction;
 use App\Models\File;
+use App\Models\Folder;
 use Illuminate\Http\Request;
+use Lorisleiva\Actions\Concerns\AsAction;
 
-class FileManagerController extends Controller
+class GetFileManagerAction extends BaseAction
 {
-    /**
-     * Display the main file manager dashboard
-     */
-    public function index(Request $request)
+    use AsAction;
+
+    protected string $title = 'File Manager';
+    protected string $view = 'admin.file';
+    protected string $url = 'file-managers';
+    protected string $permission = 'file-manager';
+
+    public function asController(Request $request)
     {
         $workspaceId = $request->workspace_id ?? 1;
         $folderId = $request->folder_id;
         $filter = $request->filter;
         $search = $request->search;
 
-        // Get folders
-        $foldersQuery = Folder::where('workspace_id', $workspaceId)
-            ->where('status', 'active')
-            ->withCount(['files' => function ($query) {
-                $query->where('status', 'active');
-            }])
-            ->with(['files' => function ($query) {
-                $query->where('status', 'active');
-            }]);
+        // Get folders - currently empty array as per original code
         $folders = [];
-        // if ($folderId) {
-        //     $foldersQuery->where('parent_folder_id', $folderId);
-        // } else {
-        //     $foldersQuery->whereNull('parent_folder_id');
-        // }
-
-        // $folders = $foldersQuery->get()->map(function ($folder) {
-        //     dd($folder);
-        //     $folder->folder_size = $folder->files->sum('file_size');
-        //     return $folder;
-        // });
 
         // Get files
         $filesQuery = File::where('workspace_id', $workspaceId)
@@ -113,97 +100,6 @@ class FileManagerController extends Controller
         ) + $storageInfo);
     }
 
-    /**
-     * Get statistics
-     */
-    public function statistics(Request $request)
-    {
-        $workspaceId = $request->workspace_id ?? 1;
-        $statistics = $this->getStatistics($workspaceId);
-
-        return view('file-manager.statistics', compact('statistics'));
-    }
-
-    /**
-     * Show trash (deleted items)
-     */
-    public function trash(Request $request)
-    {
-        $workspaceId = $request->workspace_id ?? 1;
-
-        $deletedFolders = Folder::where('workspace_id', $workspaceId)
-            ->where('status', 'deleted')
-            ->withTrashed()
-            ->get();
-
-        $deletedFiles = File::where('workspace_id', $workspaceId)
-            ->where('status', 'deleted')
-            ->withTrashed()
-            ->paginate(20);
-
-        return view('file-manager.trash', compact('deletedFolders', 'deletedFiles'));
-    }
-
-    /**
-     * Show recent files
-     */
-    public function recent(Request $request)
-    {
-        $workspaceId = $request->workspace_id ?? 1;
-
-        $files = File::where('workspace_id', $workspaceId)
-            ->where('status', 'active')
-            ->recent(30)
-            ->with(['folder', 'uploader'])
-            ->paginate(20);
-
-        return view('file-manager.recent', compact('files'));
-    }
-
-    /**
-     * Show starred files
-     */
-    public function starred(Request $request)
-    {
-        $workspaceId = $request->workspace_id ?? 1;
-
-        $files = File::where('workspace_id', $workspaceId)
-            ->where('status', 'active')
-            ->starred()
-            ->with(['folder', 'uploader'])
-            ->paginate(20);
-
-        return view('file-manager.starred', compact('files'));
-    }
-
-    /**
-     * Search files and folders
-     */
-    public function search(Request $request)
-    {
-        $workspaceId = $request->workspace_id ?? 1;
-        $query = $request->query('q');
-
-        $folders = Folder::where('workspace_id', $workspaceId)
-            ->where('status', 'active')
-            ->where(function ($q) use ($query) {
-                $q->where('name', 'like', "%{$query}%")
-                    ->orWhere('description', 'like', "%{$query}%");
-            })
-            ->get();
-
-        $files = File::where('workspace_id', $workspaceId)
-            ->where('status', 'active')
-            ->search($query)
-            ->with(['folder', 'uploader'])
-            ->paginate(20);
-
-        return view('file-manager.search', compact('folders', 'files', 'query'));
-    }
-
-    /**
-     * Get statistics data
-     */
     private function getStatistics($workspaceId)
     {
         $documents = File::where('workspace_id', $workspaceId)
@@ -265,9 +161,6 @@ class FileManagerController extends Controller
         ];
     }
 
-    /**
-     * Get storage information
-     */
     private function getStorageInfo($workspaceId)
     {
         $totalSize = File::where('workspace_id', $workspaceId)

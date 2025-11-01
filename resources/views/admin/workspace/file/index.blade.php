@@ -657,7 +657,7 @@
                             <i class="ri-folder-add-line"></i>
                             New Folder
                         </button>
-                       
+
                         <div class="dropdown">
                             <button class="btn btn-link" data-bs-toggle="dropdown">
                                 <i class="ri-more-2-fill fs-4"></i>
@@ -832,6 +832,5 @@
 @endsection
 
 @section('script')
-    @include('admin.file.include.script')
-    {{-- <script src="{{ asset('js/file-manager.js') }}"></script> --}}
+    @include('admin.workspace.file.include.script')
 @endsection
