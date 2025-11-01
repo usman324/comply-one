@@ -13,10 +13,6 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class StoreFileAction extends BaseAction
 {
-    use AsAction;
-    use RespondsWithJson;
-    use CustomAction;
-
     protected string $title = 'File';
     protected string $view = 'admin.file';
     protected string $url = 'files';
