@@ -13,7 +13,7 @@ class GetFileManagerAction extends BaseAction
     use AsAction;
 
     protected string $title = 'File Manager';
-    protected string $view = 'admin.file';
+    protected string $view = 'admin.workspace.file';
     protected string $url = 'file-managers';
     protected string $permission = 'file-manager';
 
@@ -90,10 +90,11 @@ class GetFileManagerAction extends BaseAction
         // Storage info
         $storageInfo = $this->getStorageInfo($workspaceId);
 
-        return view('admin.file.index', compact(
+        return view('admin.workspace.file.index', compact(
             'folders',
             'files',
             'rootFolders',
+            'workspaceId',
             'allFolders',
             'statistics',
             'storageInfo'

@@ -60,7 +60,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="fileSizeInput" class="form-label">File <span class="text-danger">*</span></label>
-                    <input type="file" class="form-control form-control-sm" id="file" required>
+                    <input type="file" class="form-control form-control-sm" id="fileInput" required>
                 </div>
             </div>
             <div class="modal-footer">

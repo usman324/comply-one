@@ -13,7 +13,7 @@ class GetFileAction extends BaseAction
     use AsAction;
 
     protected string $title = 'File';
-    protected string $view = 'admin.file';
+    protected string $view = 'admin.workspace.file';
     protected string $url = 'files';
     protected string $permission = 'file';
 

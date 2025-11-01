@@ -13,7 +13,7 @@ class GetFileListAction extends BaseAction
     use AsAction;
 
     protected string $title = 'File';
-    protected string $view = 'admin.file';
+    protected string $view = 'admin.workspace.file';
     protected string $url = 'files';
     protected string $permission = 'file';
 
@@ -54,7 +54,7 @@ class GetFileListAction extends BaseAction
             return DataTables::eloquent($query->with(['folder', 'uploader']))
                 ->addIndexColumn()
                 ->addColumn('actions', function ($record) {
-                    return view('admin.file.include.actions', [
+                    return view('admin.workspace.file.include.actions', [
                         'record' => $record,
                         'url' => $this->url,
                         'permission' => $this->permission

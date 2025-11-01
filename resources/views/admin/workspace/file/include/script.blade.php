@@ -1,6 +1,6 @@
 <script>
     // Configuration
-    const WORKSPACE_ID = '{{ $workspace->id }}'; // Default workspace ID
+    const WORKSPACE_ID = '{{ $workspaceId }}'; // Default workspace ID
     const USER_ID = '{{ getUser()->id }}'; // Default user ID
 
     // State
@@ -88,9 +88,9 @@
             });
         }
 
-        const uploadFileModal = document.getElementById('uploadFileModal');
-        if (uploadFileModal) {
-            uploadFileModal.addEventListener('hidden.bs.modal', function() {
+        const createFileModal = document.getElementById('createFileModal');
+        if (createFileModal) {
+            createFileModal.addEventListener('hidden.bs.modal', function() {
                 resetFileForm();
             });
         }
@@ -327,7 +327,7 @@
 
             if (data.success) {
                 showNotification(data.message, 'success');
-                bootstrap.Modal.getInstance(document.getElementById('uploadFileModal')).hide();
+                bootstrap.Modal.getInstance(document.getElementById('createFileModal')).hide();
                 loadFiles();
                 loadStatistics();
             } else {

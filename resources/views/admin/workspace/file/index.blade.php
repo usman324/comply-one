@@ -816,7 +816,7 @@
                         <h3>No files yet</h3>
                         <p>Upload your first file to get started</p>
                         <button class="btn-primary btn-sm btn-modern" data-bs-toggle="modal"
-                            data-bs-target="#uploadFileModal">
+                            data-bs-target="#createFileModal">
                             <i class="ri-upload-cloud-line"></i>
                             Upload Files
                         </button>
@@ -828,7 +828,7 @@
     </div>
 
 
-    @include('admin.file.include.modals')
+    @include('admin.workspace.file.include.modals')
 @endsection
 
 @section('script')
